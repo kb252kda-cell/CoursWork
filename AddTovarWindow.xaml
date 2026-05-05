@@ -1,0 +1,40 @@
+﻿<Window x:Class="OOPWPFProject.AddTovarWindow" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:local="clr-namespace:OOPWPFProject" mc:Ignorable="d" Title="Система обліку замовлень" Height="1000" Width="1200">
+    <Window.Resources>
+        <Style x:Key="Button" TargetType="Button">
+            <Setter Property="Background" Value="MediumOrchid"/>
+            <Setter Property="Padding" Value="10"/>
+            <Setter Property="BorderBrush" Value="Black"/>
+            <Setter Property="BorderThickness" Value="2"/>
+            <Setter Property="Margin" Value="10"/>
+        </Style>
+    </Window.Resources>
+    <Grid Background="Gray">
+        <Border MinWidth="400" Margin="15" Background="White" VerticalAlignment="Center" Padding="30" MaxWidth="600" CornerRadius="30">
+            <Border.Effect>
+                <DropShadowEffect BlurRadius="30" Color="OrangeRed" ShadowDepth="0"/>
+            </Border.Effect>
+            <ScrollViewer VerticalScrollBarVisibility="Auto">
+                <StackPanel>
+                    <TextBlock Text="Додайте замовлення" HorizontalAlignment="Center" FontSize="20" FontWeight="Bold"/>
+                    <TextBlock Text="Назва товару"/>
+                    <TextBox x:Name="nameTovar"/>
+                    <TextBlock Text="Ціна"/>
+                    <TextBox x:Name="PriceTovar"/>
+                    <ComboBox  x:Name="categoryProduct" Text="Категорії">
+                        <ComboBoxItem Content="Їжа"/>
+                        <ComboBoxItem Content="Напої"/>
+                        <ComboBoxItem Content="Інше"/>
+                    </ComboBox>
+                    <TextBlock Text="Кількість"/>
+                    <TextBox x:Name="AmountTxt"/>
+                    <Grid>
+                        <Button x:Name="AddMot" Content="Додати замовлення" MinWidth="10" MaxWidth="200" Style="{StaticResource Button}" Click="AddMot_Click"/>
+                    </Grid>
+                  
+                    
+                    
+                </StackPanel>
+            </ScrollViewer>
+        </Border>
+    </Grid>
+</Window>
