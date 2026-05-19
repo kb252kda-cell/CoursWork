@@ -625,7 +625,9 @@ namespace OOPWPFProject
             {
                 StatusS.Visibility = Visibility.Collapsed;
                 StatusSButton.Visibility = Visibility.Collapsed;
+                
                 return;
+
             }
             else
             {
