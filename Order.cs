@@ -1,0 +1,171 @@
+﻿using Npgsql;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows;
+using System.Data;
+
+namespace OOPWPFProject
+{
+    public class Order
+    {
+        private const string ConnectionString = "Host=localhost;Port=5432;Database=Order;Username=postgres;Password=promomo999;";
+        public int idOrder { get; set; }
+        public string nameProduct { get; set; }
+        public decimal totalPrice { get; set; }
+        public int amountProduct { get; set; }
+        public DateTime dateOrder { get; set; } = DateTime.Now;
+        public string clientName { get; set; }
+        public string addressOrder { get; set; }
+        public string numberClient { get; set; }
+        public string statusOrder { get; set; } = "Очікується підтвердження";
+        public string commentOrder { get; set; } = "";
+        public void addorderAdmin()
+        {
+            using (NpgsqlConnection conn = new NpgsqlConnection(ConnectionString))
+            {
+                conn.Open();
+
+                string query =
+"INSERT INTO \"OrderAdmin\" (\"nameProduct\", \"totalPrice\", \"amountProduct\", \"dateOrder\", \"clientName\",\"addressOrder\", \"numberClient\", \"statusOrder\", \"commentOrder\") " +
+"VALUES (@nameProduct, @totalPrice, @amountProduct, @dateOrder, " +
+"@clientName, @addressOrder, @numberClient, @statusOrder, @commentOrder)";
+                NpgsqlCommand cmd = new NpgsqlCommand(query, conn);
+                cmd.Parameters.AddWithValue("@nameProduct", nameProduct);
+                cmd.Parameters.AddWithValue("@totalPrice", totalPrice);
+                cmd.Parameters.AddWithValue("@amountProduct", amountProduct);
+                cmd.Parameters.AddWithValue("@dateOrder", dateOrder);
+                cmd.Parameters.AddWithValue("@clientName", clientName);
+                cmd.Parameters.AddWithValue("@addressOrder", addressOrder);
+                cmd.Parameters.AddWithValue("@numberClient", numberClient);
+                cmd.Parameters.AddWithValue("@statusOrder", statusOrder);
+                cmd.Parameters.AddWithValue("@commentOrder", commentOrder);
+
+                cmd.ExecuteNonQuery();
+
+            }
+        }
+        
+        public DataTable loadOrderUser()
+        {
+            using (var conn = new Npgsql.NpgsqlConnection(ConnectionString))
+            {
+                conn.Open();
+
+                string sql = @"SELECT ""nameProduct"", ""totalPrice"", ""amountProduct"", ""dateOrder"", ""addressOrder"", ""statusOrder""  FROM ""OrderAdmin"" WHERE ""clientName"" = @clientName";
+                NpgsqlCommand cmd = new NpgsqlCommand(sql, conn);
+                cmd.Parameters.AddWithValue("@clientName", clientName);
+    
+                Npgsql.NpgsqlDataAdapter da = new Npgsql.NpgsqlDataAdapter(cmd);
+                DataTable dt = new DataTable();
+                da.Fill(dt);
+
+                return dt;
+            }
+        }
+        public DataTable loadOrderCourier()
+        {
+            using (var conn = new Npgsql.NpgsqlConnection(ConnectionString))
+            {
+                conn.Open();
+
+                string sql = @"SELECT ""idOrder"", ""nameProduct"", ""totalPrice"", ""amountProduct"", ""clientName"", ""addressOrder"", ""numberClient"", ""statusOrder"" FROM ""OrderAdmin""";
+                NpgsqlCommand cmd = new NpgsqlCommand(sql, conn);
+    
+                cmd.Parameters.AddWithValue("@statusOrder", statusOrder);
+                Npgsql.NpgsqlDataAdapter da = new Npgsql.NpgsqlDataAdapter(cmd);
+                DataTable dt = new DataTable();
+                da.Fill(dt);
+
+                return dt;
+            }
+        }
+        public DataTable loadOrderAdmin()
+        {
+            using (var conn = new Npgsql.NpgsqlConnection(ConnectionString))
+            {
+                conn.Open();
+
+                string sql = "SELECT * FROM \"OrderAdmin\"";
+
+                Npgsql.NpgsqlDataAdapter da = new Npgsql.NpgsqlDataAdapter(sql, conn);
+                DataTable dt = new DataTable();
+                da.Fill(dt);
+
+                return dt;
+            }
+        }
+        public void deleteorder()
+        {
+            using (var conn = new Npgsql.NpgsqlConnection(ConnectionString))
+            {
+                conn.Open();
+                string sql = "DELETE FROM \"OrderAdmin\" WHERE \"idOrder\" = @idOrder";
+                NpgsqlCommand cmd = new NpgsqlCommand(sql, conn);
+                cmd = new NpgsqlCommand(sql, conn);
+                cmd.Parameters.AddWithValue("@idOrder", idOrder);
+                cmd.ExecuteNonQuery();
+                MessageBox.Show("Замовлення видалено!");
+            }
+        }
+        public void editOrder()
+        {
+            using (var conn = new Npgsql.NpgsqlConnection(ConnectionString))
+            {
+                conn.Open();
+                string sql = "UPDATE \"OrderAdmin\" SET \"nameProduct\" = @nameProduct,\"totalPrice\" = @totalPrice, \"amountProduct\" = @amountProduct, \"dateOrder\" = @dateOrder, \"clientName\" = @clientName,\"addressOrder\" = @addressOrder, \"statusOrder\" = @statusOrder, \"commentOrder\" = @commentOrder WHERE \"idOrder\" = @idOrder";
+                NpgsqlCommand cmd = new NpgsqlCommand(sql, conn);
+                cmd.Parameters.AddWithValue("@nameProduct", nameProduct);
+                cmd.Parameters.AddWithValue("@totalPrice", totalPrice);
+                cmd.Parameters.AddWithValue("@amountProduct", amountProduct);
+                cmd.Parameters.AddWithValue("@dateOrder", dateOrder);
+                cmd.Parameters.AddWithValue("@clientName", clientName);
+                cmd.Parameters.AddWithValue("@addressOrder", addressOrder);
+                cmd.Parameters.AddWithValue("@statusOrder", statusOrder);
+                cmd.Parameters.AddWithValue("@commentOrder", commentOrder);
+                cmd.Parameters.AddWithValue("@idOrder", idOrder);
+                cmd.ExecuteNonQuery();
+                MessageBox.Show("Замовлення редаговано!");
+            }
+        }
+        public DataTable searchOrder()
+        {
+            using (var conn = new Npgsql.NpgsqlConnection(ConnectionString))
+            {
+                conn.Open();
+
+                string sql = "SELECT * FROM \"OrderAdmin\" WHERE \"idOrder\" = @idOrder";
+                NpgsqlCommand cmd = new NpgsqlCommand(sql, conn);
+                cmd.Parameters.AddWithValue("@idOrder", idOrder);
+                NpgsqlDataAdapter da = new NpgsqlDataAdapter(cmd);
+                DataTable dt = new DataTable();
+                da.Fill(dt);
+                return dt;
+            }
+        }
+      
+
+        public void changeStatus()
+        {
+            using (var conn = new NpgsqlConnection(ConnectionString))
+            {
+                conn.Open();
+
+                string sql = "UPDATE \"OrderAdmin\" SET \"statusOrder\" = @status WHERE \"idOrder\" = @idOrder";
+
+                NpgsqlCommand cmd = new NpgsqlCommand(sql, conn);
+
+                cmd.Parameters.AddWithValue("@status", statusOrder);
+                cmd.Parameters.AddWithValue("@idOrder", idOrder);
+
+                cmd.ExecuteNonQuery();
+
+                MessageBox.Show("Статус змінено!");
+                
+            }
+        }
+    }
+}
+

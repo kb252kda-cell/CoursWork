@@ -4,7 +4,8 @@
     using System.Collections.Generic;
     using System.Data;
     using System.Linq;
-    using System.Text;
+using System.Security.Cryptography.X509Certificates;
+using System.Text;
     using System.Threading.Tasks;
     using System.Windows;
     using System.Windows.Controls;
@@ -15,6 +16,8 @@
     using System.Windows.Media.Imaging;
     using System.Windows.Shapes;
 using System.Xml.Linq;
+using static GMap.NET.Entity.OpenStreetMapGeocodeEntity;
+using System.Windows.Threading;
 
 
 namespace OOPWPFProject
@@ -25,23 +28,43 @@ namespace OOPWPFProject
 
     public partial class Window2 : Window
     {
-
-
-
+        courier courier1 = new courier();
+        Delivery delivery = new Delivery();
+        Tovar tov = new Tovar();
+        Order order = new Order();
         private bool loggg = false;
         private string currentname = "";
         private bool IsAdminka = false;
         private string currentemail = "";
         private DataTable cart = new DataTable();
         private DataTable carts = new DataTable();
+        private const string ConnectionString = "Host=localhost;Port=5432;Database=Order;Username=postgres;Password=promomo999;";
+        DispatcherTimer timer = new DispatcherTimer();
         public Window2()
         {
             InitializeComponent();
             CreateCartTable();
             createorder();
+            timer.Interval = TimeSpan.FromSeconds(5);
+            timer.Tick += Timer_Tick;
+            
         }
 
+        private void Timer_Tick(object sender, EventArgs e)
+        {
+            order.statusOrder = "Доставлено";
 
+            order.changeStatus();
+            StatusS.SelectedItem = "Доставлено";
+
+            StatusS.Visibility = Visibility.Visible;
+            OrdersList.ItemsSource = order.loadOrderCourier().DefaultView;
+
+            MessageBox.Show("Замовлення доставлено!");
+
+            timer.Stop();
+
+        }
         private void createorder()
         {
             carts.Columns.Add("Дата");
@@ -76,12 +99,11 @@ namespace OOPWPFProject
             {
                 case 0:
                     Tovary.Visibility = Visibility.Visible;
-                    LoadTovary();
+                    LoadTovar();
                     break;
                 case 1:
 
                     Zamovlennya.Visibility = Visibility.Visible;
-                    LoadOrders();
                     break;
                 case 2:
                     basket.Visibility = Visibility.Visible;
@@ -116,7 +138,11 @@ namespace OOPWPFProject
             NumTxt.Visibility = Visibility.Collapsed;
             Name_Fname.Visibility = Visibility.Collapsed;
             Name_FnameTxt.Visibility = Visibility.Collapsed;
-
+            TovarCour.Visibility = Visibility.Visible;
+            BasketCour.Visibility = Visibility.Visible;
+            Code.Visibility = Visibility.Collapsed;
+            CodeTxt.Visibility = Visibility.Collapsed;
+            LogCourier.Visibility = Visibility.Collapsed;
         }
 
         private void r_Checked(object sender, RoutedEventArgs e)
@@ -131,17 +157,37 @@ namespace OOPWPFProject
             EmailTxt.Visibility = Visibility.Visible;
             TxtPass.Visibility = Visibility.Visible;
             Password.Visibility = Visibility.Visible;
+            TovarCour.Visibility = Visibility.Visible;
+            BasketCour.Visibility = Visibility.Visible;
+            Code.Visibility = Visibility.Collapsed;
+            CodeTxt.Visibility = Visibility.Collapsed;
+            LogCourier.Visibility = Visibility.Collapsed;
 
         }
-
+        private void c_Checked(object sender, RoutedEventArgs e)
+        {
+            Log.Visibility = Visibility.Collapsed;
+            Reg.Visibility = Visibility.Collapsed;
+            Numbe.Visibility = Visibility.Collapsed;
+            Email.Visibility = Visibility.Collapsed;
+            EmailTxt.Visibility = Visibility.Collapsed;
+            TxtPass.Visibility = Visibility.Collapsed;
+            Password.Visibility = Visibility.Collapsed;
+            NumTxt.Visibility = Visibility.Collapsed;
+            Name_Fname.Visibility = Visibility.Collapsed;
+            Name_FnameTxt.Visibility = Visibility.Collapsed;
+            TovarCour.Visibility = Visibility.Collapsed;
+            BasketCour.Visibility = Visibility.Collapsed;
+            Code.Visibility = Visibility.Visible;
+            CodeTxt.Visibility = Visibility.Visible;
+            LogCourier.Visibility = Visibility.Visible;
+        }
         private void Reg_Click(object sender, RoutedEventArgs e)
         {
             string email = Email.Text;
             string password = Password.Password;
             string numbers = Numbe.Text;
             bool valid = true;
-
-            string connectionString = "Host=localhost;Port=5432;Database=Order;Username=postgres;Password=promomo999;";
 
             if (!email.Contains("@") || !email.Contains(".com"))
             {
@@ -155,7 +201,7 @@ namespace OOPWPFProject
                 Email.ToolTip = "";
                 Email.Background = Brushes.Transparent;
             }
-            if (!Name_Fname.Text.All(c => char.IsLetter(c) || c == ' '))
+            if (!Name_Fname.Text.All(c => char.IsLetter(c) || c == ' ') || string.IsNullOrWhiteSpace(Name_Fname.Text))
             {
                 Name_Fname.ToolTip = "Введіть корректно прізвище або ім'я";
                 Name_Fname.Background = Brushes.Red;
@@ -192,7 +238,7 @@ namespace OOPWPFProject
 
             if (valid == true)
             {
-                using (NpgsqlConnection conn = new NpgsqlConnection(connectionString))
+                using (NpgsqlConnection conn = new NpgsqlConnection(ConnectionString))
                 {
                     conn.Open();
                     string checkQuery = "SELECT COUNT(*) FROM \"Login\" WHERE email=@email";
@@ -224,42 +270,30 @@ namespace OOPWPFProject
                         MessageBox.Show("Акаунт створено!");
                         AmountCombo.Visibility = Visibility.Visible;
                         AddOrder.Visibility = Visibility.Visible;
+                        order.loadOrderUser();
+                        Email.Clear();
+                        Numbe.Clear();
+                        Name_Fname.Clear();
+                        Password.Clear();
                     }
                 }
             }
 
         }
-        private void LoadTovary()
-        {
-            string connectionString = "Host=localhost;Port=5432;Database=Order;Username=postgres;Password=promomo999;";
 
-            using (var conn = new Npgsql.NpgsqlConnection(connectionString))
-            {
-                conn.Open();
-
-                string sql = "SELECT * FROM \"Tovar\"";
-
-                Npgsql.NpgsqlDataAdapter da = new Npgsql.NpgsqlDataAdapter(sql, conn);
-                DataTable dt = new DataTable();
-                da.Fill(dt);
-
-                TovarGrid.ItemsSource = dt.DefaultView;
-            }
-        }
         private void selectAmount(object sender, SelectionChangedEventArgs e)
         {
-            if (TovarGrid.SelectedItem == null)
+            if (TovarGridOf.SelectedItem == null)
                 return;
 
-            DataRowView row = TovarGrid.SelectedItem as DataRowView;
+            DataRowView row = TovarGridOf.SelectedItem as DataRowView;
 
             if (row == null)
                 return;
 
             AmountCombo.Items.Clear();
 
-            int maxQuantity = Convert.ToInt32(row["Кількість"]);
-
+            int.TryParse(row["Amount"].ToString(), out int maxQuantity);
             if (maxQuantity == 0)
             {
                 MessageBox.Show("Товару немає на складі");
@@ -300,16 +334,16 @@ namespace OOPWPFProject
                     AmountCombo.Visibility = Visibility.Visible;
                     AddOrder.Visibility = Visibility.Visible;
                     Delete.Visibility = Visibility.Visible;
+                    AddCourier.Visibility = Visibility.Visible;
+                
                     return;
                 }
-                string connectionString = "Host=localhost;Port=5432;Database=Order;Username=postgres;Password=promomo999;";
 
-                using (NpgsqlConnection conn = new NpgsqlConnection(connectionString))
+                using (NpgsqlConnection conn = new NpgsqlConnection(ConnectionString))
                 {
                     conn.Open();
 
-                    string query = "SELECT \"Pass\", \"Name_Firstname\" FROM \"Login\" WHERE email=@email";
-
+                    string query = "SELECT \"Pass\", \"Name_Firstname\", \"Number\" FROM \"Login\" WHERE email=@email";
                     NpgsqlCommand cmd = new NpgsqlCommand(query, conn);
                     cmd.Parameters.AddWithValue("@email", email);
                     using (NpgsqlDataReader reader = cmd.ExecuteReader())
@@ -322,6 +356,7 @@ namespace OOPWPFProject
 
                         string Hash = reader["Pass"]?.ToString();
                         string nameFromDb = reader["Name_Firstname"]?.ToString();
+                        NumberPhone = reader["Number"]?.ToString();
 
                         if (BCrypt.Net.BCrypt.Verify(password, Hash))
                         {
@@ -336,7 +371,9 @@ namespace OOPWPFProject
                             Login.Visibility = Visibility.Collapsed;
                             Profile.Visibility = Visibility.Visible;
                             AddOrder.Visibility = Visibility.Visible;
-
+                            AmountCombo.Visibility = Visibility.Visible;
+                            OrdersList.ItemsSource = order.loadOrderUser().DefaultView;
+                           
                         }
                         else
                         {
@@ -358,222 +395,279 @@ namespace OOPWPFProject
         private void addTovar_Click(object sender, RoutedEventArgs e)
         {
             AddTovarWindow addt = new AddTovarWindow();
-
             addt.Show();
         }
 
         private void AddOrder_Click(object sender, RoutedEventArgs e)
         {
-            int currentQty;
-            int currentpri;
-            int addanm;
-            if (!int.TryParse(AmountCombo.SelectedItem?.ToString(), out addanm))
+            if (TovarGridOf.SelectedItem == null)
             {
-                MessageBox.Show("Некоректна кількість");
+                MessageBox.Show("Виберіть товар");
                 return;
             }
-            if (AmountCombo.SelectedItem != null && TovarGrid.SelectedItem != null)
+
+            if (AmountCombo.SelectedItem == null)
             {
-
-                string selectedName = ((DataRowView)TovarGrid.SelectedItem)["Ім'я"].ToString();
-
-                bool found = false;
-
-                foreach (DataRow row in cart.Rows)
-                {
-                    if (row["Назва"].ToString() == selectedName)
-                    {
-
-                        int.TryParse(row["Ціна"]?.ToString(), out currentpri);
-
-
-                        if (!int.TryParse(row["Кількість"]?.ToString(), out currentQty))
-                        {
-                            MessageBox.Show("Некоректна кількість у кошику");
-                            return;
-                        }
-
-
-                        int totalQty = currentQty + addanm;
-                        row["Кількість"] = totalQty;
-                        int summ = currentpri * totalQty;
-                        row["Сума"] = summ;
-                        found = true;
-                        break;
-                    }
-                }
-
-                if (!found)
-                {
-                    int.TryParse(((DataRowView)TovarGrid.SelectedItem)["Ціна"]?.ToString(), out int price);
-
-                    DataRow newRow = cart.NewRow();
-                    newRow["Назва"] = selectedName;
-                    newRow["Ціна"] = ((DataRowView)TovarGrid.SelectedItem)["Ціна"];
-                    newRow["Кількість"] = addanm;
-                    newRow["Сума"] = price * addanm;
-
-
-                    cart.Rows.Add(newRow);
-                }
+                MessageBox.Show("Виберіть кількість");
+                return;
             }
+
+
+            DataRowView row = (DataRowView)TovarGridOf.SelectedItem;
+
+            string name = row["NameProduct"].ToString();
+
+            decimal.TryParse(row["Price"].ToString(), out decimal price);
+
+            int.TryParse(AmountCombo.SelectedItem.ToString(), out int amount);
+
+            decimal sum = price * amount;
+
+            cart.Rows.Add(name, price, amount, sum);
+
+            MessageBox.Show("Товар додано в кошик");
+
+
+        }
+
+        private void LoadTovar()
+        {
+            DataTable dt = tov.loadTovary();
+
+            TovarGridOf.ItemsSource = dt.DefaultView;
+        }
+
+
+
+
+        private void exitAcc_Click(object sender, RoutedEventArgs e)
+        {
+            loggg = false;
+            isAdmin = false;
+            currentemail = "";
+            currentname = "";
+            LoginTxt.Text = "Увійти";
+            loginpng.Source = new BitmapImage(new Uri("/login.png", UriKind.Relative));
+            Profile.Visibility = Visibility.Collapsed;
+            Login.Visibility = Visibility.Visible;
+            AddOrder.Visibility = Visibility.Collapsed;
+            Delete.Visibility = Visibility.Collapsed;
+            addTovar.Visibility = Visibility.Collapsed;
+            cart.Clear();
         }
 
         private void AddOrders_Click(object sender, RoutedEventArgs e)
         {
-            if (cart.Rows.Count == 0)
+
+            bool valid = true;
+            if (string.IsNullOrWhiteSpace(AdressDelivery.Text))
             {
-                MessageBox.Show("Кошик порожній");
-                return;
+                AdressDelivery.ToolTip = "Введіть адресу!";
+                AdressDelivery.Background = Brushes.Red;
+                valid = false;
+            }
+            else
+            {
+                AdressDelivery.ToolTip = "";
+                AdressDelivery.Background = Brushes.White;
+
+            }
+            if (CityDelivery.SelectedItem == null)
+            {
+                CityDelivery.ToolTip = "Виберіть місто!";
+                CityDelivery.Background = Brushes.Red;
+                valid = false;
+            }
+            else
+            {
+                CityDelivery.ToolTip = "";
+                CityDelivery.Background = Brushes.White;
+
+            }
+            if (!CartPayment.IsChecked.Value && !MoneyPayment.IsChecked.Value)
+            {
+                MessageBox.Show("Виберіть спосіб оплати!");
+                valid = false;
             }
 
-            if (!loggg)
-            {
-                MessageBox.Show("Спочатку увійдіть в акаунт");
+            if (!valid)
                 return;
-            }
 
-            string connectionString = "Host=localhost;Port=5432;Database=Order;Username=postgres;Password=promomo999;";
-            bool chek = true;
 
-            using (NpgsqlConnection conn = new NpgsqlConnection(connectionString))
+            if (CartPayment.IsChecked == true)
             {
-                conn.Open();
+                MessageBox.Show("Оплата картою");
+            }
+            if (MoneyPayment.IsChecked == true)
+            {
+                MessageBox.Show("Оплата готівкою");
+            }
+            if (valid)
+            {
+                delivery.addressDelivery = (AdressDelivery.SelectedItem as ComboBoxItem)?.Content.ToString();
+                delivery.cityDelivery = (CityDelivery.SelectedItem as ComboBoxItem)?.Content.ToString();
+                delivery.addDelivery();
 
 
-                foreach (DataRow row in cart.Rows)
+                DataRowView row = (DataRowView)TovarGridOf.SelectedItem;
+
+                order.nameProduct = row["NameProduct"].ToString();
+
+                decimal.TryParse(row["Price"].ToString(), out decimal price);
+                int.TryParse(AmountCombo.SelectedItem.ToString(), out int amount);
+
+                using (NpgsqlConnection conn = new NpgsqlConnection(ConnectionString))
                 {
-                    string name = row["Назва"].ToString();
-                    int.TryParse(row["Кількість"]?.ToString(), out int amount);
+                    conn.Open();
 
-                    string sql = "SELECT \"Кількість\" FROM \"Tovar\" WHERE \"Ім'я\" = @name";
+                    string sql = "UPDATE \"Tovar\" SET \"Amount\" = \"Amount\" - @count WHERE \"NameProduct\" = @name";
+
                     NpgsqlCommand cmd = new NpgsqlCommand(sql, conn);
-                    cmd.Parameters.AddWithValue("@name", name);
-                    object result = cmd.ExecuteScalar();
 
-                    if (result == null)
-                    {
-                        MessageBox.Show($"Товар {name} не знайдено в базі");
-                        chek = false;
-                        continue;
-                    }
+                    cmd.Parameters.AddWithValue("@count", amount);
+                    cmd.Parameters.AddWithValue("@name", order.nameProduct);
 
-                    int.TryParse(result.ToString(), out int dbamount);
-                    if (dbamount < amount)
-                    {
-                        MessageBox.Show($"Недостатньо товару: {name}. На складі {dbamount}, потрібно {amount}");
-                        chek = false;
-                    }
-                }
-
-                if (!chek)
-                {
-                    MessageBox.Show("Замовлення неможливо оформити");
-                    return;
-                }
-
-                int totalSum = 0;
-                foreach (DataRow row in cart.Rows)
-                {
-                    int.TryParse(row["Сума"]?.ToString(), out int s);
-                    totalSum += s;
-                }
-
-
-                string insertOrder = "INSERT INTO \"Order\" (\"Email\", \"Дата\", \"Сума\") VALUES (@emal, @date, @sum)";
-                using (NpgsqlCommand cmd = new NpgsqlCommand(insertOrder, conn))
-                {
-                    cmd.Parameters.AddWithValue("@emal", currentemail);
-                    cmd.Parameters.AddWithValue("@date", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
-                    cmd.Parameters.AddWithValue("@sum", totalSum);
                     cmd.ExecuteNonQuery();
                 }
+                order.numberClient = NumberPhone;
+                order.totalPrice = price * amount;
+                order.amountProduct = amount;
 
-
-                foreach (DataRow row in cart.Rows)
-                {
-                    string name = row["Назва"].ToString();
-                    int.TryParse(row["Кількість"]?.ToString(), out int amount);
-
-                    string updateSql = "UPDATE \"Tovar\" SET \"Кількість\" = \"Кількість\" - @amount WHERE \"Ім'я\" = @name";
-                    using (NpgsqlCommand cmd = new NpgsqlCommand(updateSql, conn))
-                    {
-                        cmd.Parameters.AddWithValue("@amount", amount);
-                        cmd.Parameters.AddWithValue("@name", name);
-                        cmd.ExecuteNonQuery();
-                    }
-                }
-
-
-                cart.Clear();
-                MessageBox.Show("Замовлення оформлено успішно!");
+                order.dateOrder = DateTime.Now;
+                order.clientName = currentname;
+                order.addressOrder =
+                (CityDelivery.SelectedItem as ComboBoxItem)?.Content.ToString()
+                + ", " +
+                AdressDelivery.Text;
+                order.addorderAdmin();
+                LoadTovar();
+                OrdersList.ItemsSource = order.loadOrderUser().DefaultView;
             }
         }
 
-        private void LoadOrders()
+        private void AddCourier_Click(object sender, RoutedEventArgs e)
         {
-            string connectionString = "Host=localhost;Port=5432;Database=Order;Username=postgres;Password=promomo999;";
+            RegistCourier courieropen = new RegistCourier();
+            courieropen.Show();
 
-            using (var conn = new NpgsqlConnection(connectionString))
+        }
+
+        private void CityDelivery_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            AdressDelivery.Items.Clear();
+
+            string city = (CityDelivery.SelectedItem as ComboBoxItem)?.Content.ToString();
+
+            if (city == "Київ")
             {
-                conn.Open();
+                AdressDelivery.Items.Add("Хрещатик");
+                AdressDelivery.Items.Add("Оболонська");
+                AdressDelivery.Items.Add("Саксаганського");
+            }
 
-                string sql;
+            else if (city == "Львів")
+            {
+                AdressDelivery.Items.Add("Шевченка");
+                AdressDelivery.Items.Add("Городоцька");
+                AdressDelivery.Items.Add("Личаківська");
+            }
 
-                if (isAdmin)
-                {
-                    sql = "SELECT * FROM \"Order\"";
-                }
-                else
-                {
-                    sql = "SELECT * FROM \"Order\" WHERE \"Email\" = @email";
-                }
-
-                NpgsqlDataAdapter da = new NpgsqlDataAdapter(sql, conn);
-
-                if (!isAdmin)
-                    da.SelectCommand.Parameters.AddWithValue("@email", currentemail);
-
-                DataTable dt = new DataTable();
-                da.Fill(dt);
-                OrdersList.ItemsSource = dt.DefaultView;
+            else if (city == "Житомир")
+            {
+                AdressDelivery.Items.Add("Київська");
+                AdressDelivery.Items.Add("Перемоги");
+                AdressDelivery.Items.Add("Велика Бердичівська");
             }
         }
 
-        private void exitAcc_Click(object sender, RoutedEventArgs e)
+        private void LogCourier_Click(object sender, RoutedEventArgs e)
         {
+            courier1.codeLogin = Code.Text;
 
-        }
+            DataTable dt = courier1.searchCode();
 
-        private void Delete_Click(object sender, RoutedEventArgs e)
-        {
-            if (TovarGrid.SelectedItem is not DataRowView selectedUser)
+            if (dt.Rows.Count > 0)
             {
-                MessageBox.Show("Оберіть користувача для видалення.",
-                    "Увага", MessageBoxButton.OK, MessageBoxImage.Warning);
+                loggg = true;
+
+                currentname = "Кур'єр";
+                ProfileName.Text = "Ви увійшли як Кур'єр";
+
+                loginpng.Source = new BitmapImage(new Uri("/profile.png", UriKind.Relative));
+                LoginTxt.Text = "Профіль";
+
+                Login.Visibility = Visibility.Collapsed;
+                Profile.Visibility = Visibility.Visible;
+
+                OrdersList.ItemsSource = order.loadOrderCourier().DefaultView;
+
+                MessageBox.Show("Успішний вхід!");
+            }
+            else
+            {
+                MessageBox.Show("Невірний код!");
+            }
+        
+        }
+        private void OrdersList_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (OrdersList.SelectedItem == null)
+                return;
+
+            DataRowView row = OrdersList.SelectedItem as DataRowView;
+
+            if (row == null)
+                return;
+
+            string status = row["statusOrder"].ToString();
+
+            if (status == "Доставлено")
+            {
+                StatusS.Visibility = Visibility.Collapsed;
+                StatusSButton.Visibility = Visibility.Collapsed;
                 return;
             }
-            string connectionString = "Host=localhost;Port=5432;Database=Order;Username=postgres;Password=promomo999;";
-            using (var conn = new NpgsqlConnection(connectionString))
+            else
             {
-                conn.Open();
-                string sql = "DELETE FROM \"Tovar\" WHERE \"Ім'я\" = @name";
-                using (var cmd = new NpgsqlCommand(sql, conn))
-                {
-                    string name = selectedUser["Ім'я"].ToString();
-                    cmd.Parameters.AddWithValue("@name",name);
-                    int rows = cmd.ExecuteNonQuery();
+                StatusS.Visibility = Visibility.Visible;
+                StatusSButton.Visibility = Visibility.Visible;
+            }
 
-                    if (rows > 0)
-                    {
-                      
-                        MessageBox.Show($"Товар «{name}» видалено.", "Готово",
-                            MessageBoxButton.OK, MessageBoxImage.Information);
-                    }
-                }
-            
+            StatusS.Items.Clear();
 
-                    }
-                }
+            StatusS.Items.Add("Очікується підтвердження");
+            StatusS.Items.Add("В дорозі");
+            StatusS.Items.Add("Доставлено");
+
+            StatusS.SelectedItem = status;
+        }
+
+        private void StatusSButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (OrdersList.SelectedItem == null)
+            {
+                MessageBox.Show("Виберіть замовлення");
+                return;
+            }
+
+            if (StatusS.SelectedItem == null)
+            {
+                MessageBox.Show("Виберіть статус");
+                return;
+            }
+            DataRowView row = OrdersList.SelectedItem as DataRowView;
+
+            int.TryParse(row["idOrder"].ToString(), out int id);
+            order.idOrder = id;
+            order.statusOrder = StatusS.SelectedItem.ToString();
+            order.changeStatus();
+            OrdersList.ItemsSource = order.loadOrderCourier().DefaultView;
+            if (order.statusOrder == "В дорозі")
+            {
+                StatusS.Visibility = Visibility.Collapsed;
+                order.idOrder = id;
+                timer.Start();
+            }
+        }
     }
-}
+    }
