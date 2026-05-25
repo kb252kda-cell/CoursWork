@@ -114,26 +114,7 @@
                     MessageBox.Show("Замовлення видалено!");
                 }
             }
-            public void editOrder()
-            {
-                using (var conn = new Npgsql.NpgsqlConnection(ConnectionString))
-                {
-                    conn.Open();
-                    string sql = "UPDATE \"OrderAdmin\" SET \"nameProduct\" = @nameProduct,\"totalPrice\" = @totalPrice, \"amountProduct\" = @amountProduct, \"dateOrder\" = @dateOrder, \"clientName\" = @clientName,\"addressOrder\" = @addressOrder, \"statusOrder\" = @statusOrder, \"commentOrder\" = @commentOrder WHERE \"idOrder\" = @idOrder";
-                    NpgsqlCommand cmd = new NpgsqlCommand(sql, conn);
-                    cmd.Parameters.AddWithValue("@nameProduct", nameProduct);
-                    cmd.Parameters.AddWithValue("@totalPrice", totalPrice);
-                    cmd.Parameters.AddWithValue("@amountProduct", amountProduct);
-                    cmd.Parameters.AddWithValue("@dateOrder", dateOrder);
-                    cmd.Parameters.AddWithValue("@clientName", clientName);
-                    cmd.Parameters.AddWithValue("@addressOrder", addressOrder);
-                    cmd.Parameters.AddWithValue("@statusOrder", statusOrder);
-                    cmd.Parameters.AddWithValue("@commentOrder", commentOrder);
-                    cmd.Parameters.AddWithValue("@idOrder", idOrder);
-                    cmd.ExecuteNonQuery();
-                    MessageBox.Show("Замовлення редаговано!");
-                }
-            }
+           
             public DataTable searchOrder()
             {
             using (var conn = new NpgsqlConnection(ConnectionString))

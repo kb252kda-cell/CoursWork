@@ -42,63 +42,8 @@ namespace OOPWPFProject
 
             addDelivery();
         }
-        public DataTable loadDelivery()
-        {
-            using (var conn = new Npgsql.NpgsqlConnection(ConnectionString))
-            {
-                conn.Open();
-
-                string sql = "SELECT * FROM \"Delivery\"";
-
-                Npgsql.NpgsqlDataAdapter da = new Npgsql.NpgsqlDataAdapter(sql, conn);
-                DataTable dt = new DataTable();
-                da.Fill(dt);
-
-                return dt;
-            }
-        }
-        public void editDelivery()
-        {
-            using (var conn = new Npgsql.NpgsqlConnection(ConnectionString))
-            {
-                conn.Open();
-                string sql = "UPDATE \"Delivery\" SET \"cityDelivery\" = @cityDelivery,\"addressDelivery\" = @addressDelivery, \"statusDelivery\" = @statusDelivery  WHERE \"idDelivery\" = @idDelivery";
-                NpgsqlCommand cmd = new NpgsqlCommand(sql, conn);
-                cmd.Parameters.AddWithValue("@cityDelivery", cityDelivery);
-                cmd.Parameters.AddWithValue("@addressDelivery", addressDelivery);
-                cmd.Parameters.AddWithValue("@statusDelivery", statusDelivery);
-                cmd.Parameters.AddWithValue("@idDelivery", idDelivery);
-                cmd.ExecuteNonQuery();
-                MessageBox.Show("Замовлення редаговано!");
-            }
-        }
-        public void deleteDelivery()
-        {
-            using (var conn = new Npgsql.NpgsqlConnection(ConnectionString))
-            {
-                conn.Open();
-                string sql = "DELETE FROM \"Delivery\" WHERE \"idDelivery\" = @idDelivery";
-                NpgsqlCommand cmd = new NpgsqlCommand(sql, conn);
-                cmd.Parameters.AddWithValue("@idDelivery", idDelivery);
-                cmd.ExecuteNonQuery();
-                MessageBox.Show("Замовлення видалено!");
-            }
-        }
-        public DataTable searchDelivery()
-        {
-            using (var conn = new Npgsql.NpgsqlConnection(ConnectionString))
-            {
-                conn.Open();
-
-                string sql = "SELECT * FROM \"Delivery\" WHERE \"idDelivery\" = @idDelivery";
-                NpgsqlCommand cmd = new NpgsqlCommand(sql, conn);
-                cmd.Parameters.AddWithValue("@idDelivery", idDelivery);
-                NpgsqlDataAdapter da = new NpgsqlDataAdapter(cmd);
-                DataTable dt = new DataTable();
-                da.Fill(dt);
-                return dt;
-            }
-        }
+      
+        
         public void changeStatusDelivery(){
             using (var conn = new NpgsqlConnection(ConnectionString))
             {
