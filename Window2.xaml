@@ -309,7 +309,7 @@ AutoGenerateColumns="True" Width="500" IsReadOnly="True" Margin="20" RowHeight="
                 <Button Visibility="Collapsed" x:Name="StatusSButton" Content="Змінити статус" Background="#4A5668" Foreground="White"
    BorderBrush="Transparent" Height="45" FontSize="16" Margin="0,400,0,0" Width="300" Click="StatusSButton_Click" />
                 <Button x:Name="DeleteOrder" Margin="0,300,0,0" Content="Видалити замовлення" Width="200" Click="DeleteOrder_Click" Visibility="Collapsed"/>
-                <ComboBox Visibility="Collapsed" x:Name="SortPrice" Margin="0,-280,150,0" SelectionChanged="SortPrice_SelectionChanged" Background="White" Width="100" materialDesign:HintAssist.Hint="Sort Price">
+                <ComboBox Visibility="Collapsed" x:Name="SortPrice" Margin="0,-250,0,0" Height="40" SelectionChanged="SortPrice_SelectionChanged" Background="White" Width="100" materialDesign:HintAssist.Hint="Sort Price">
                     <ComboBoxItem Content="Спочатку дешевші"/>
                     <ComboBoxItem Content="Спочатку дорожчі"/>
                     <ComboBoxItem Content="Усі"/>
