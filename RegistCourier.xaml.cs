@@ -23,18 +23,29 @@ namespace OOPWPFProject
     /// </summary>
     public partial class RegistCourier : Window
     {
+
+        Courier couriers = new Courier();
+        private void LoadCouriers()
+        {
+            CourierGrid.ItemsSource = couriers.loadCourier().DefaultView;
+        }
         public RegistCourier()
         {
             InitializeComponent();
-            DataContext = this;
-            loadCourier();
+            LoadCouriers();
         }
-        private const string ConnectionString = "Host=localhost;Port=5432;Database=Order;Username=postgres;Password=promomo999;";
+       
 
         private void RegistrCourier_Click(object sender, RoutedEventArgs e)
         {
             bool valid = true;
-           
+            couriers.nameEmployee = fmaim_nameCour.Text;
+            couriers.GenderCourier = (GenderCour.SelectedItem as ComboBoxItem)?.Content.ToString();
+            couriers.codeLogin = CodeCourier.Text;
+            couriers.cityCourier = (cityCour.SelectedItem as ComboBoxItem)?.Content.ToString();
+            couriers.photoCourier = Photo1.Text;
+            couriers.numberCourier = Number.Text;
+
             if (!fmaim_nameCour.Text.All(c => char.IsLetter(c) || c == ' ') || string.IsNullOrWhiteSpace(fmaim_nameCour.Text))
             {
                 fmaim_nameCour.ToolTip = "Введіть корректно прізвище або ім'я";
@@ -92,17 +103,29 @@ namespace OOPWPFProject
                 Photo1.ToolTip = "";
                 Photo1.Background = Brushes.Transparent;
             }
-            if (!int.TryParse(ageCour.Text, out int ageCou) || ageCou < 17)
+            if (!int.TryParse(ageCour.Text, out int age))
             {
-                ageCour.ToolTip = "Введіть вік кур’єра від 17 років!";
+                ageCour.ToolTip = "Введіть коректний вік!";
                 ageCour.Background = Brushes.Red;
                 valid = false;
             }
             else
             {
-                ageCour.ToolTip = "";
-                ageCour.Background = Brushes.Transparent;
+                couriers.ageCourier = age;
+
+                if (!couriers.IsageCourier())
+                {
+                    ageCour.ToolTip = "Введіть вік кур’єра від 17 років!";
+                    ageCour.Background = Brushes.Red;
+                    valid = false;
+                }
+                else
+                {
+                    ageCour.ToolTip = "";
+                    ageCour.Background = Brushes.Transparent;
+                }
             }
+
             if (string.IsNullOrWhiteSpace(CodeCourier.Text))
             {
                 CodeCourier.ToolTip = "Додайте код!";
@@ -114,29 +137,23 @@ namespace OOPWPFProject
                 CodeCourier.ToolTip = "";
                 CodeCourier.Background = Brushes.Transparent;
             }
-            if (valid)
+            if (!valid)
             {
-                using (NpgsqlConnection conn = new NpgsqlConnection(ConnectionString))
-                {
-                    conn.Open();
+                return;
+            }
+         
+            if (couriers.addCourier())
+            {
 
-                    string query =
-    "INSERT INTO \"Courier\" " +
-    "(\"ElementName\", \"ageCourier\", \"GenderCourier\", \"cityCourier\", \"photoCourier\", \"numberCourier\", \"codeLogin\") " +
-    "VALUES (@fnameandname, @ageCourier, @genderCourier, @cityCour, @photo, @number, @CodeCourier)";
-                    NpgsqlCommand cmd = new NpgsqlCommand(query, conn);
-                    cmd.Parameters.AddWithValue("@fnameandname", fmaim_nameCour.Text);
-                    cmd.Parameters.AddWithValue("@ageCourier", ageCour.Text);
-                    cmd.Parameters.AddWithValue("@genderCourier", (GenderCour.SelectedItem as ComboBoxItem)?.Content.ToString());
-                    cmd.Parameters.AddWithValue("@CodeCourier", CodeCourier.Text);
-                    cmd.Parameters.AddWithValue("@cityCour", (cityCour.SelectedItem as ComboBoxItem)?.Content.ToString());
-                    cmd.Parameters.AddWithValue("@photo", Photo1.Text);
-                    cmd.Parameters.AddWithValue("@number", Number.Text);
-                    cmd.ExecuteNonQuery();
-                    MessageBox.Show("Кур'єра додано!");
-                    loadCourier();
+                LoadCouriers();
+                fmaim_nameCour.Clear();
+                ageCour.Clear();
+                Number.Clear();
+                Photo1.Clear();
+                CodeCourier.Clear();
 
-                }
+                GenderCour.SelectedIndex = -1;
+                cityCour.SelectedIndex = -1;
             }
         }
 
@@ -146,22 +163,7 @@ namespace OOPWPFProject
             if (openFileDialog.ShowDialog() == true)
                 Photo1.Text = openFileDialog.FileName;
         }
-        private void loadCourier()
-        {
-
-            using (var conn = new Npgsql.NpgsqlConnection(ConnectionString))
-            {
-                conn.Open();
-
-                string sql = "SELECT * FROM \"Courier\"";
-
-                Npgsql.NpgsqlDataAdapter da = new Npgsql.NpgsqlDataAdapter(sql, conn);
-                DataTable dt = new DataTable();
-                da.Fill(dt);
-
-                CourierGrid.ItemsSource = dt.DefaultView;
-            }
-        }
+      
 
         private void GenerationCode_Click(object sender, RoutedEventArgs e)
         {

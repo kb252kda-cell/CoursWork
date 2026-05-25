@@ -2,6 +2,7 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
        xmlns:gmap="clr-namespace:GMap.NET.WindowsPresentation;assembly=GMap.NET.WindowsPresentation"
+            xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:OOPWPFProject"
@@ -62,7 +63,7 @@
             <Setter Property="HorizontalContentAlignment" Value="Center"/>
             <Setter Property="VerticalContentAlignment" Value="Center"/>
         </Style>
-        <ImageBrush x:Key="MENU2" ImageSource="MENU2.png"/>
+        <ImageBrush x:Key="MENU2" ImageSource="/Photos/MENU2.png"/>
         <Style x:Key="Font_style" TargetType="TextBlock">
             <Setter Property="FontFamily" Value="Resources/Roboto/Roboto-Light.ttf"/>
             <Setter Property="VerticalAlignment" Value="Center"/>
@@ -135,7 +136,7 @@
                                   BorderThickness="0"
                                   Style="{StaticResource Mennu2}">
                         <ToggleButton.Background>
-                            <ImageBrush ImageSource="MENU.png" Stretch="UniformToFill"/>
+                            <ImageBrush ImageSource="/Photos/MENU.png" Stretch="UniformToFill"/>
                         </ToggleButton.Background>
                         <ToggleButton.Triggers>
                             <EventTrigger RoutedEvent="ToggleButton.Unchecked">
@@ -162,14 +163,14 @@
                     </ToggleButton>
                 </Grid>
 
-                <ListView x:Name="OrdList"
+                <ListView x:Name="OrdList" Visibility="Visible"
                           Background="Transparent"
                           BorderBrush="Transparent"
                           ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                           SelectionChanged="OrdList_SelectionChanged">
                     <ListViewItem x:Name="TovarCour" Visibility="Visible" Style="{StaticResource MenuItem_Style}">
                         <StackPanel Orientation="Horizontal" Width="230" Height="50">
-                            <Image Source="/Buymenu.png" Stretch="None" Width="30" Margin="17,0,0,0"/>
+                            <Image Source="/Photos/Buymenu.png" Stretch="None" Width="30" Margin="17,0,0,0"/>
                             <TextBlock Text="Товари" Margin="18,0,0,0" Style="{StaticResource Font_style}"/>
                         </StackPanel>
                         <ListViewItem.ToolTip>
@@ -178,7 +179,7 @@
                     </ListViewItem>
                     <ListViewItem  Style="{StaticResource MenuItem_Style}">
                         <StackPanel Orientation="Horizontal" Width="230" Height="50">
-                            <Image Source="/Orderssssss.png" Stretch="None" Width="30" Margin="17,0,0,0"/>
+                            <Image Source="/Photos/Orderssssss.png" Stretch="None" Width="30" Margin="17,0,0,0"/>
                             <TextBlock Text="Замовлення" Margin="18,0,0,0" Style="{StaticResource Font_style}"/>
                         </StackPanel>
                         <ListViewItem.ToolTip>
@@ -187,7 +188,7 @@
                     </ListViewItem>
                     <ListViewItem x:Name="BasketCour" Visibility="Visible" Style="{StaticResource MenuItem_Style}">
                         <StackPanel Orientation="Horizontal" Width="230" Height="50">
-                            <Image Source="/Order.png" Stretch="None" Width="30" Margin="17,0,0,0"/>
+                            <Image Source="/Photos/Order.png" Stretch="None" Width="30" Margin="17,0,0,0"/>
                             <TextBlock Text="Корзина" Margin="18,0,0,0" Style="{StaticResource Font_style}"/>
                         </StackPanel>
                         <ListViewItem.ToolTip >
@@ -196,7 +197,7 @@
                     </ListViewItem>
                     <ListViewItem Style="{StaticResource MenuItem_Style}">
                         <StackPanel Orientation="Horizontal" Width="230" Height="50">
-                            <Image x:Name="loginpng" Source="/login.png" Stretch="None" Width="30" Margin="17,0,0,0"/>
+                            <Image x:Name="loginpng" Source="/Photos/login.png" Stretch="None" Width="30" Margin="17,0,0,0" RenderTransformOrigin="43.234,6.531"/>
                             <TextBlock x:Name="LoginTxt" Text="Увійти" Margin="18,0,0,0" Style="{StaticResource Font_style}"/>
                         </StackPanel>
                         <ListViewItem.ToolTip>
@@ -205,7 +206,7 @@
                     </ListViewItem>
                     <ListViewItem Visibility="Visible" Style="{StaticResource MenuItem_Style}">
                         <StackPanel Orientation="Horizontal" Width="230" Height="50">
-                            <Image Source="/Exit.png" Stretch="None" Width="30" Margin="17,0,0,0"/>
+                            <Image Source="/Photos/Exit.png" Stretch="None" Width="30" Margin="17,0,0,0"/>
                             <TextBlock Text="Вийти" Margin="18,0,0,0" Style="{StaticResource Font_style}"/>
                         </StackPanel>
                         <ListViewItem.ToolTip>
@@ -225,7 +226,18 @@
             </Grid.RowDefinitions>
             <Grid x:Name="Tovary" Visibility="Collapsed" Background="#1E2228" Grid.RowSpan="2">
                 <TextBlock Text="Товари" Foreground="White" FontSize="24" Margin="20"/>
-                <DataGrid x:Name="TovarGridOf" Style="{StaticResource ModernDataGrid}" AutoGenerateColumns="False" RowHeight="100" HorizontalScrollBarVisibility="Hidden" Margin="20,60,20,80" SelectionChanged="selectAmount">
+                <StackPanel x:Name="StackSearch" Orientation="Horizontal"  Margin="500,-400,0,0" Visibility="Collapsed">
+                    <TextBox x:Name="SearchName"  materialDesign:HintAssist.Hint="пошук" Padding="0" FontSize="14" Foreground="Black" Background="white" Width="150" VerticalAlignment="Center" TextAlignment="Center" VerticalContentAlignment="Center" Height="35"   Style="{StaticResource MaterialDesignFilledTextBox}" />
+                    <Button x:Name="SearchButton" Content="🔎" Height="35" Click="SearchButton_Click"/>
+                    
+                </StackPanel>
+                <ComboBox x:Name="SearchCategori" Visibility="Collapsed" SelectionChanged="SearchCategori_Selected" Background="White" Height="55" Width="150" materialDesign:HintAssist.Hint="Категорія" Margin="0,-400,0,0" Style="{StaticResource MaterialDesignOutlinedComboBox}">
+                    <ComboBoxItem Content="Їжа"/>
+                    <ComboBoxItem Content="Напої"/>
+                    <ComboBoxItem Content="Інше"/>
+                    <ComboBoxItem Content="Усі"/>
+                </ComboBox>
+                <DataGrid x:Name="TovarGridOf" Style="{StaticResource ModernDataGrid}" AutoGenerateColumns="False" RowHeight="100" HorizontalScrollBarVisibility="Hidden" Height="300" Margin="20,60,20,80" SelectionChanged="selectAmount">
                     <DataGrid.Columns>
                         <DataGridTextColumn Header="Назва товару"  Width="160" Binding="{Binding [NameProduct]}">
                             <DataGridTextColumn.ElementStyle>
@@ -278,69 +290,81 @@
                     </DataGrid.Columns>
 
                 </DataGrid>
-                <ComboBox Visibility="Collapsed" x:Name="AmountCombo" Height="45" FontSize="16" Margin="0,300,0,0" Width="100"/>
+                
+                <ComboBox Visibility="Collapsed" x:Name="AmountCombo" Height="45" FontSize="16" Margin="0,300,0,0" Width="100" Background="White"/>
                 <Button Visibility="Collapsed" x:Name="AddOrder" Content="Додати замолення в кошик"    Background="#4A5668" Foreground="White"
    BorderBrush="Transparent" Height="45" FontSize="16" Margin="0,400,0,0" Width="300" Click="AddOrder_Click"/>
-                <Button Visibility="Collapsed" x:Name="Delete"   Content="Видалити товари" Background="#4A5668" Foreground="White"
-   BorderBrush="Transparent" Height="45" FontSize="16" Margin="0,500,0,0" Width="300"/>
+                <Button Visibility="Collapsed" x:Name="Delete"  Content="Видалити товари" Background="#4A5668" Foreground="White"
+   BorderBrush="Transparent" Height="45" FontSize="16" Margin="0,500,0,0" Width="300" Click="Delete_Click"/>
             </Grid>
             <Grid x:Name="Zamovlennya" Visibility="Collapsed" Background="#1E2228" Grid.RowSpan="2">
 
+
                 <TextBlock Text="Замовлення" Foreground="White" FontSize="24" Margin="20"/>
+                <TextBox x:Name="SearchNameOrder" Background="White" Width="150" Height="40" Visibility="Collapsed" Margin="260,-250,0,0" materialDesign:HintAssist.Hint="Введіть назву для пошуку"/>
+                <Button x:Name="SearchButtonName" Margin="460,-251,0,0" Height="40" Width="50" Visibility="Collapsed" Content="🔎" Click="SearchButtonName_Click"/>
                 <DataGrid x:Name="OrdersList" SelectionChanged="OrdersList_SelectionChanged" Style="{StaticResource ModernDataGrid}" 
 AutoGenerateColumns="True" Width="500" IsReadOnly="True" Margin="20" RowHeight="40" ColumnHeaderHeight="40" Height="200"/>
-                <TextBlock Text="Змінити статус" Width="100" Height="30" Margin="0,250,0,0" Foreground="Wheat"/>
-                <ComboBox x:Name="StatusS" Width="100" Height="30" Margin="0,300,0,0"/>
-                <Button x:Name="StatusSButton" Content="Змінити статус" Background="#4A5668" Foreground="White"
+                <ComboBox Visibility="Collapsed" materialDesign:HintAssist.Hint="Змінити статус"  x:Name="StatusS" Width="165" Height="30" Margin="0,300,0,0" Background="White"/>
+                <Button Visibility="Collapsed" x:Name="StatusSButton" Content="Змінити статус" Background="#4A5668" Foreground="White"
    BorderBrush="Transparent" Height="45" FontSize="16" Margin="0,400,0,0" Width="300" Click="StatusSButton_Click" />
-
-
+                <Button x:Name="DeleteOrder" Margin="0,300,0,0" Content="Видалити замовлення" Width="200" Click="DeleteOrder_Click" Visibility="Collapsed"/>
+                <ComboBox Visibility="Collapsed" x:Name="SortPrice" Margin="0,-280,150,0" SelectionChanged="SortPrice_SelectionChanged" Background="White" Width="100" materialDesign:HintAssist.Hint="Sort Price">
+                    <ComboBoxItem Content="Спочатку дешевші"/>
+                    <ComboBoxItem Content="Спочатку дорожчі"/>
+                    <ComboBoxItem Content="Усі"/>
+                </ComboBox>
+                <Button Visibility="Collapsed" x:Name="ButtonInfoCourier" Margin="0,400,0,0" Content="Дані кур'єра" Width="200" Click="ButtonInfoCourier_Click"/>
             </Grid>
-            <Grid x:Name="basket" Visibility="Collapsed" Background="#4A5668" Grid.RowSpan="2">
+            <Grid x:Name="basket" Visibility="Collapsed" Background="#1E2228" Grid.RowSpan="2">
                 <TextBlock Text="Кошик" Foreground="Black" FontSize="24" Margin="20"/>
+                <TextBlock x:Name="TotalText" FontSize="18" FontWeight="Bold" Foreground="White"  Margin="0,100,0,0"/>
+
                 <DataGrid x:Name="BasketGrid"
 Style="{StaticResource ModernDataGrid}" 
                           
+                          
 AutoGenerateColumns="True" Width="500" IsReadOnly="True" Margin="20" RowHeight="40" ColumnHeaderHeight="40" Height="200"/>
 
-                <StackPanel Orientation="Horizontal" Margin="0,400,0,0">
+                <StackPanel  x:Name="CityD" >
 
-                    <StackPanel x:Name="AddressD" Margin="0,0,10,0" >
-                        <TextBlock Text="Адрес доставки" Foreground="White"/>
-                        <ComboBox x:Name="AdressDelivery"
-                 Width="200"
-                 Height="35"/>
+                    <ComboBox Visibility="Collapsed" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" materialDesign:HintAssist.Hint="Місто доставки" Style="{StaticResource MaterialDesignOutlinedComboBox}" FontSize="18" x:Name="CityDelivery" Background="White" SelectionChanged="CityDelivery_SelectionChanged"  Width="200" Height="57" Margin="0,400,500,0">
+                        <ComboBox.ItemContainerStyle>
+                            <Style TargetType="ComboBoxItem">
+                                <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                            </Style>
+                        </ComboBox.ItemContainerStyle>
+                        <ComboBoxItem Content="Житомир"/>
+                        <ComboBoxItem Content="Львів"/>
+                        <ComboBoxItem Content="Київ"/>
+                    </ComboBox>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" Margin="0,400,0,0" x:Name="DeliveryStace" Visibility="Collapsed">
+
+                    <StackPanel  x:Name="AddressD" Margin="250,10,0,0"  >
+
+                        <ComboBox  x:Name="AdressDelivery" Width="180" Background="White" FontSize="18" Height="57" materialDesign:HintAssist.Hint="Оберіть адресу" Style="{StaticResource MaterialDesignOutlinedComboBox}" Margin="0,-10,0,0"/>
                     </StackPanel>
 
-                    <StackPanel x:Name="CityD">
-                        <TextBlock Text="Місто доставки" Foreground="Black"/>
-                        <ComboBox x:Name="CityDelivery"
-                                  SelectionChanged="CityDelivery_SelectionChanged"
-                 Width="200"
-                 Height="35">
-                            <ComboBoxItem Content="Житомир"/>
-                            <ComboBoxItem Content="Львів"/>
-                            <ComboBoxItem Content="Київ"/>
-                        </ComboBox>
-                    </StackPanel>
+                   
                 </StackPanel>
 
-                <StackPanel  Orientation="Horizontal" Margin="0,400,0,0"  >
-                    <RadioButton x:Name="CartPayment" Content="Оплата картою" Height="20" Margin="0,10,0,0" />
-                    <RadioButton x:Name="MoneyPayment" Content="Оплата готівкою" Height="20" Margin="0,10,0,0"/>
+                <StackPanel  x:Name="paymnetStack" Visibility="Collapsed"  Orientation="Horizontal" Margin="0,400,0,0"  >
+                    <RadioButton  x:Name="CartPayment" Foreground="White" Content="Оплата картою" Height="20" Margin="0,10,0,0"   Style="{StaticResource MaterialDesignRadioButton}"/>
+                    <RadioButton  x:Name="MoneyPayment" Foreground="White" Content="Оплата готівкою" Style="{StaticResource MaterialDesignRadioButton}" Height="20" Margin="0,10,0,0"/>
                 </StackPanel>
 
 
-                <Button  x:Name="AddOrders" Content="Додати замолення в кошик"    Background="Green" Foreground="White"
-BorderBrush="Transparent" Height="45" FontSize="16" Margin="0,400,0,0" Width="280" Click="AddOrders_Click"/>
+                <Button Visibility="Collapsed" x:Name="AddOrders" Content="Оформити замовлення!"    Background="Green" Foreground="White"
+BorderBrush="Transparent" Height="45" FontSize="16" Margin="20,420,0,0" Width="250" Click="AddOrders_Click"/>
             </Grid>
             <Grid x:Name="Login" Visibility="Collapsed" Background="#1E2228" Grid.RowSpan="2">
 
                 <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Width="300">
-                    <StackPanel x:Name="Logins" Orientation="Horizontal" Margin="0,100,0,0 ">
-                        <RadioButton x:Name="l" Content="Увійти в аккаунт" Checked="l_Checked" FontSize="10" Margin="0,10,0,0"/>
-                        <RadioButton x:Name="r" Content="Створити аккаунт" Checked="r_Checked" Background="White" Foreground="#CE93D8" FontSize="10" Margin="0,10,0,0"/>
-                        <RadioButton x:Name="C" Content="Увійти як кур'єр" Checked="c_Checked" Background="White" Foreground="#CE93D8" FontSize="10" Margin="0,10,0,0"/>
+                    <StackPanel x:Name="Logins" Orientation="Vertical" Margin="0,100,0,0 ">
+                        <RadioButton x:Name="l" Content="Увійти в аккаунт" Checked="l_Checked" Foreground="#CE93D8" FontSize="10" Margin="0,10,0,0" Style="{StaticResource MaterialDesignRadioButton}"/>
+                        <RadioButton x:Name="r" Content="Створити аккаунт" Checked="r_Checked" Background="White" Foreground="#CE93D8" FontSize="10" Margin="0,10,0,0" Style="{StaticResource MaterialDesignRadioButton}"/>
+                        <RadioButton x:Name="C" Content="Увійти як кур'єр" Checked="c_Checked" Background="White" Foreground="#CE93D8" FontSize="10" Margin="0,10,0,0" Style="{StaticResource MaterialDesignRadioButton}"/>
                     </StackPanel>
                     <TextBlock x:Name="EmailTxt" Text="Email" Foreground="#aaaaaa" FontSize="13" Margin="0,0,0,5" Visibility="Collapsed"/>
                         <TextBox x:Name="Email" Background="#2E333A" Foreground="White"
@@ -377,9 +401,11 @@ BorderBrush="#4A5668" Height="40" FontSize="15" Margin="0,0,0,20" Visibility="Co
                     <TextBlock x:Name="ProfileEmail" Foreground="#aaaaaa" FontSize="16" Margin="0,0,0,10"/>
                     <TextBlock x:Name="ProfileName" Foreground="#aaaaaa" FontSize="16" Margin="0,0,0,10"/>
                     <TextBlock x:Name="ProfileNumber" Foreground="#aaaaaa" FontSize="16" Margin="0,0,0,20"/>
-                    <Button x:Name="exitAcc" Content="Вийти з акаунту" Click="exitAcc_Click"  
-   Background="#4A5668" Foreground="White"
-   BorderBrush="Transparent" Height="45" FontSize="16"/>
+                    <TextBlock Text="Баланс:" Margin="0,-100,0,0" Foreground="White" FontSize="15" Style="{StaticResource MaterialDesignTextBlock}"/>
+                    <Button Visibility="Collapsed" x:Name="Deposit" Content="Поповнити баланс"/>
+                    <Button x:Name="exitAcc" Content="Вийти з акаунту"  Click="exitAcc_Click"  
+Background="#4A5668" Foreground="Red"
+BorderBrush="Transparent" Height="45" FontSize="16" Margin="0,30,0,0"/>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" Margin="0,100">
                     <Button x:Name="addTovar" Click="addTovar_Click" 

@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using static GMap.NET.Entity.OpenStreetMapGeocodeEntity;
 namespace OOPWPFProject
 {
     internal class Delivery
@@ -33,6 +34,13 @@ namespace OOPWPFProject
             }
 
 
+        }
+        public void CreateDelivery(string city, string address)
+        {
+            this.addressDelivery = address;
+           this.cityDelivery = city;
+
+            addDelivery();
         }
         public DataTable loadDelivery()
         {

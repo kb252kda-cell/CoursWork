@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Documents;
 
 namespace OOPWPFProject
 {
@@ -14,11 +15,27 @@ namespace OOPWPFProject
     {
         private const string ConnectionString = "Host=localhost;Port=5432;Database=Order;Username=postgres;Password=promomo999;";
         public string nameTovar1 { get; set; }
-        public int idProduct {  get; set; }
+        public int idProduct { get; set; }
         public string photoTovar1 { get; set; }
         public int amountTovar1 { get; set; }
         public decimal priceTovar1 { get; set; }
         public string categoriTovar1 { get; set; }
+        public void Update()
+        {
+            using (NpgsqlConnection conn = new NpgsqlConnection(ConnectionString))
+            {
+                conn.Open();
+
+                string sql = "UPDATE \"Tovar\" SET \"Amount\" = \"Amount\" - @count WHERE \"NameProduct\" = @name";
+
+                NpgsqlCommand cmd = new NpgsqlCommand(sql, conn);
+
+                cmd.Parameters.AddWithValue("@count", amountTovar1);
+                cmd.Parameters.AddWithValue("@name", nameTovar1);
+
+                cmd.ExecuteNonQuery();
+            }
+        }
         public void addproduct()
         {
 
@@ -34,10 +51,10 @@ namespace OOPWPFProject
                 cmd.Parameters.AddWithValue("@Price", priceTovar1);
                 cmd.Parameters.AddWithValue("@Amount", amountTovar1);
                 cmd.Parameters.AddWithValue("@PhotoProduct", photoTovar1);
-               
+
                 cmd.ExecuteNonQuery();
 
-                MessageBox.Show("Товар додано!");
+                
 
             }
         }
@@ -55,7 +72,7 @@ namespace OOPWPFProject
 
                 return dt;
             }
-            
+
         }
         public void deleteTovar()
         {
@@ -67,16 +84,16 @@ namespace OOPWPFProject
                 cmd = new NpgsqlCommand(sql, conn);
                 cmd.Parameters.AddWithValue("@idTovar", idProduct);
                 cmd.ExecuteNonQuery();
-                MessageBox.Show("Товар видалено!");
             }
         }
-        public void editTovar() {
+        public void editTovar()
+        {
             using (var conn = new Npgsql.NpgsqlConnection(ConnectionString))
             {
                 conn.Open();
                 string sql = "UPDATE \"Tovar\" SET \"NameProduct\" = @nameProduct,\"Categori\" = @categori, \"Price\" = @price, \"Amount\" = @amountproduct, \"PhotoProduct\" = @photoproduct  WHERE \"IdTovar\" = @idTovar";
                 NpgsqlCommand cmd = new NpgsqlCommand(sql, conn);
-                cmd.Parameters.AddWithValue("@NameProduct", nameTovar1);
+                cmd.Parameters.AddWithValue("@nameProduct", nameTovar1);
                 cmd.Parameters.AddWithValue("@categori", categoriTovar1);
                 cmd.Parameters.AddWithValue("@price", priceTovar1);
                 cmd.Parameters.AddWithValue("@amountproduct", amountTovar1);
@@ -84,6 +101,36 @@ namespace OOPWPFProject
                 cmd.Parameters.AddWithValue("@idTovar", idProduct);
                 cmd.ExecuteNonQuery();
                 MessageBox.Show("Товар редаговано!");
+            }
+        }
+        public DataTable searchTovarname()
+        {
+            using (var conn = new Npgsql.NpgsqlConnection(ConnectionString))
+            {
+                conn.Open();
+
+                string sql = "SELECT * FROM \"Tovar\" WHERE \"NameProduct\" ILIKE  @nameTovar1";
+                NpgsqlCommand cmd = new NpgsqlCommand(sql, conn);
+                cmd.Parameters.AddWithValue("@nameTovar1", "%" + nameTovar1 + "%");
+                NpgsqlDataAdapter da = new NpgsqlDataAdapter(cmd);
+                DataTable dt = new DataTable();
+                da.Fill(dt);
+                return dt;
+            }
+        }
+        public DataTable searchCategori()
+        {
+            using (var conn = new Npgsql.NpgsqlConnection(ConnectionString))
+            {
+                conn.Open();
+
+                string sql = "SELECT * FROM \"Tovar\" WHERE \"Categori\" = @categori";
+                NpgsqlCommand cmd = new NpgsqlCommand(sql, conn);
+                cmd.Parameters.AddWithValue("@categori",  categoriTovar1);
+                NpgsqlDataAdapter da = new NpgsqlDataAdapter(cmd);
+                DataTable dt = new DataTable();
+                da.Fill(dt);
+                return dt;
             }
         }
 
