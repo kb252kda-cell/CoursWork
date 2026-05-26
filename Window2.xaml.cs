@@ -1,4 +1,5 @@
 ﻿    using Npgsql;
+using OOPWPFProject.Class;
 using System;
     using System.Collections;
     using System.Collections.Generic;
@@ -43,6 +44,14 @@ namespace OOPWPFProject
         private DataTable carts = new DataTable();
         DispatcherTimer timer = new DispatcherTimer();
         private bool isCourier = false;
+        private void UpdateBalanceUI()
+        {
+            DepositBalance db = new DepositBalance();
+            decimal balance = db.GetBalance(NumberPhone);
+            BalanceText.Text = $"Баланс: {balance} грн";
+
+            Deposit.Visibility = balance < 60 ? Visibility.Visible : Visibility.Collapsed;
+        }
         public Window2()
         {
             InitializeComponent();
@@ -89,10 +98,17 @@ namespace OOPWPFProject
             order.statusOrder = "Доставлено";
             order.changeStatus();
 
+            decimal courierPayment = 60; 
+            DepositBalance db = new DepositBalance();
+            bool paid = db.AddCourierPayment(courier1.codeLogin, courierPayment);
+
+            if (paid)
+                MessageBox.Show($"Замовлення доставлено! Вам нараховано {courierPayment} грн");
+            else
+                MessageBox.Show(" Замовлення доставлено!");
+
             StatusS.Visibility = Visibility.Visible;
             LoadCourierOrders();
-            MessageBox.Show("Замовлення доставлено!");
-
             timer.Stop();
 
 
@@ -133,7 +149,19 @@ namespace OOPWPFProject
 
 
             HideAllPanels();
-            switch (OrdList.SelectedIndex)
+            if (!isLoggedIn && OrdList.SelectedIndex != 3)
+            {
+                Login.Visibility = Visibility.Visible;
+
+                Tovary.Visibility = Visibility.Collapsed;
+                Zamovlennya.Visibility = Visibility.Collapsed;
+                basket.Visibility = Visibility.Collapsed;
+                Profile.Visibility = Visibility.Collapsed;
+
+
+                return;
+            }
+                switch (OrdList.SelectedIndex)
             {
                 case 0:
                     Tovary.Visibility = Visibility.Visible;
@@ -158,11 +186,15 @@ namespace OOPWPFProject
                         paymnetStack.Visibility = Visibility.Visible;
                         AddOrders.Visibility = Visibility.Visible;
                         CityDelivery.Visibility = Visibility.Visible;
-                        Deposit.Visibility = Visibility.Visible;
                         DeleteOrder.Visibility = Visibility.Visible;
                         SearchNameOrder.Visibility = Visibility.Visible;
                         SearchButtonName.Visibility = Visibility.Visible;
                         SortPrice.Visibility = Visibility.Visible;
+                        BuyMenu.Visibility = Visibility.Visible;
+                        OrdersPhoto.Visibility = Visibility.Visible;
+                        BusketPhoto.Visibility = Visibility.Visible;
+                        UpdateBalanceUI();
+
                     }
                     else
                     {
@@ -176,6 +208,7 @@ namespace OOPWPFProject
                         DeliveryStace.Visibility = Visibility.Collapsed;
                         paymnetStack.Visibility = Visibility.Collapsed;
                         DeleteOrder.Visibility = Visibility.Collapsed;
+                      
                     }
                     break;
                 case 3:
@@ -206,16 +239,12 @@ namespace OOPWPFProject
             Reg.Visibility = Visibility.Collapsed;
             Numbe.Visibility = Visibility.Collapsed;
             Email.Visibility = Visibility.Visible;
-            EmailTxt.Visibility = Visibility.Visible;
-            TxtPass.Visibility = Visibility.Visible;
+            
             Password.Visibility = Visibility.Visible;
-            NumTxt.Visibility = Visibility.Collapsed;
             Name_Fname.Visibility = Visibility.Collapsed;
-            Name_FnameTxt.Visibility = Visibility.Collapsed;
             TovarCour.Visibility = Visibility.Visible;
             BasketCour.Visibility = Visibility.Visible;
             Code.Visibility = Visibility.Collapsed;
-            CodeTxt.Visibility = Visibility.Collapsed;
             LogCourier.Visibility = Visibility.Collapsed;
         }
 
@@ -224,17 +253,12 @@ namespace OOPWPFProject
             Reg.Visibility = Visibility.Visible;
             Log.Visibility = Visibility.Collapsed;
             Numbe.Visibility = Visibility.Visible;
-            NumTxt.Visibility = Visibility.Visible;
             Name_Fname.Visibility = Visibility.Visible;
-            Name_FnameTxt.Visibility = Visibility.Visible;
             Email.Visibility = Visibility.Visible;
-            EmailTxt.Visibility = Visibility.Visible;
-            TxtPass.Visibility = Visibility.Visible;
             Password.Visibility = Visibility.Visible;
             TovarCour.Visibility = Visibility.Visible;
             BasketCour.Visibility = Visibility.Visible;
             Code.Visibility = Visibility.Collapsed;
-            CodeTxt.Visibility = Visibility.Collapsed;
             LogCourier.Visibility = Visibility.Collapsed;
 
         }
@@ -244,16 +268,11 @@ namespace OOPWPFProject
             Reg.Visibility = Visibility.Collapsed;
             Numbe.Visibility = Visibility.Collapsed;
             Email.Visibility = Visibility.Collapsed;
-            EmailTxt.Visibility = Visibility.Collapsed;
-            TxtPass.Visibility = Visibility.Collapsed;
             Password.Visibility = Visibility.Collapsed;
-            NumTxt.Visibility = Visibility.Collapsed;
             Name_Fname.Visibility = Visibility.Collapsed;
-            Name_FnameTxt.Visibility = Visibility.Collapsed;
             TovarCour.Visibility = Visibility.Collapsed;
             BasketCour.Visibility = Visibility.Collapsed;
             Code.Visibility = Visibility.Visible;
-            CodeTxt.Visibility = Visibility.Visible;
             LogCourier.Visibility = Visibility.Visible;
         }
         private void Reg_Click(object sender, RoutedEventArgs e)
@@ -410,11 +429,14 @@ namespace OOPWPFProject
                         {
                     isCourier = false;
                     isLoggedIn = true;
+                   
                     currentname = users.Name_Firstname;
                     order.clientName = currentname;
                     NumberPhone = users.Number;
+                    NumberPhone = users.Number;
+                    UpdateBalanceUI();
 
-                    currentemail = email;
+                       currentemail = email;
                             ProfileName.Text = "Ваше ім'я та прізвище " + users.Name_Firstname;
 
                             loginpng.Source = new BitmapImage(new Uri("/Photos/profile.png", UriKind.Relative));
@@ -429,8 +451,15 @@ namespace OOPWPFProject
                             basket.Visibility = Visibility.Visible;
                             SearchCategori.Visibility = Visibility.Visible;
                             StackSearch.Visibility = Visibility.Visible;
+                    TovarCour.Visibility = Visibility.Visible;
+                    BasketCour.Visibility = Visibility.Visible;
+                    BuyMenu.Visibility = Visibility.Visible;
+                    OrdersPhoto.Visibility = Visibility.Visible;
+                    BusketPhoto.Visibility = Visibility.Visible;
+                    Email.Clear();
+                    Password.Clear();
 
-                        }
+                }
                         else
                         {
                             Exit.Text = "Невірний email або пароль";
@@ -516,7 +545,10 @@ namespace OOPWPFProject
             AddCourier.Visibility = Visibility.Collapsed;
             SearchCategori.Visibility = Visibility.Collapsed;
             StackSearch.Visibility = Visibility.Collapsed;
-
+            AddOrders.Visibility = Visibility.Collapsed;
+            BuyMenu.Visibility = Visibility.Collapsed;
+            OrdersPhoto.Visibility = Visibility.Collapsed;
+            BusketPhoto.Visibility = Visibility.Collapsed;
             ((ListBoxItem)OrdList.ItemContainerGenerator.ContainerFromIndex(2)).Visibility = Visibility.Visible;
             cart.Clear();
             OrdersList.ItemsSource = null;
@@ -565,6 +597,29 @@ namespace OOPWPFProject
             { return; 
             }
 
+            if (CartPayment.IsChecked == true)
+            {
+                decimal total = cart.AsEnumerable().Sum(r => Convert.ToDecimal(r["Сума"]));
+
+                DepositBalance db = new DepositBalance();
+                decimal currentBalance = db.GetBalance(NumberPhone);
+
+                if (currentBalance < total)
+                {
+                    MessageBox.Show($"Недостатньо коштів!\nБаланс: {currentBalance} грн\nСума: {total} грн");
+                    return;
+                }
+
+                bool deducted = db.DeductBalance(NumberPhone, total);
+                if (!deducted)
+                {
+                    MessageBox.Show("Помилка списання коштів!");
+                    return;
+                }
+
+                UpdateBalanceUI(); 
+            }
+
 
             if (valid)
             {
@@ -609,7 +664,11 @@ namespace OOPWPFProject
                 cart.Clear();
                 UpdateTotal();
                 MessageBox.Show("Замовлення оформлено!");
-
+                AdressDelivery.Items.Clear();
+                AdressDelivery.SelectedItem = null;
+                CityDelivery.SelectedItem = null;
+                CartPayment.IsChecked = false;
+                MoneyPayment.IsChecked = false;
             }
         }
 
@@ -669,7 +728,13 @@ namespace OOPWPFProject
                 StatusS.Visibility = Visibility.Visible;
                 StatusSButton.Visibility = Visibility.Visible;
                 LoadCourierOrders();
+                Code.Clear();
+                HideAllPanels();
+                Zamovlennya.Visibility = Visibility.Visible;
+                LoadCourierOrders();
 
+                OrdList.SelectedIndex = 1;
+                OrdersPhoto.Visibility = Visibility.Visible;
                 MessageBox.Show("Успішний вхід!");
             }
             else
@@ -909,6 +974,17 @@ namespace OOPWPFProject
             OrdersList.ItemsSource = null;
             OrdersList.ItemsSource = dt.DefaultView;
 
+        }
+       
+        private void Deposit_Click(object sender, RoutedEventArgs e)
+        {
+            DepositWindow depositWindow = new DepositWindow(NumberPhone);
+            depositWindow.Closed += (s, args) =>
+            {
+                UpdateBalanceUI();
+
+            };
+            depositWindow.Show();
         }
     }
     }

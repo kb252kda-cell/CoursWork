@@ -161,11 +161,15 @@
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
     <Compile Include="Class\Courier.cs" />
+    <Compile Include="Class\DepositBalance.cs" />
     <Compile Include="CourierInfo.xaml.cs">
       <DependentUpon>CourierInfo.xaml</DependentUpon>
     </Compile>
     <Compile Include="Class\Delivery.cs" />
     <Compile Include="Class\Order.cs" />
+    <Compile Include="Deposit.xaml.cs">
+      <DependentUpon>Deposit.xaml</DependentUpon>
+    </Compile>
     <Compile Include="RegistCourier.xaml.cs">
       <DependentUpon>RegistCourier.xaml</DependentUpon>
     </Compile>
@@ -231,6 +235,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="CourierInfo.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Deposit.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

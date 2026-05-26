@@ -1,0 +1,44 @@
+﻿<Window x:Class="OOPWPFProject.DepositWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:OOPWPFProject"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        mc:Ignorable="d"
+        WindowStyle="SingleBorderWindow"
+        Title="Deposit" Height="450" Width="500" 
+        ResizeMode="NoResize"
+        WindowStartupLocation="CenterScreen" 
+        Background="#1E2228">
+
+    <Grid>
+        <TextBlock Text="Поповненя балансу" FontSize="20" HorizontalAlignment="Center" Foreground="White" Height="35" Margin="0,-300,0,0"/>
+
+        <StackPanel x:Name="StackCheck" Margin="0,-150,0,0" Orientation="Horizontal"  Visibility="Visible" >
+            <TextBox  Background="White"  FontSize="15" x:Name="NumberCart"
+                 Height="35"
+                 VerticalContentAlignment="Center"
+                 Margin="0,10,0,0"
+                 Width="200"
+                 materialDesign:HintAssist.Hint="Введіть номер карти"
+                 Style="{StaticResource MaterialDesignFloatingHintTextBox}"/>
+            <TextBox Background="White" Width="100" Height="35" Margin="10,10,0,0" FontSize="15" x:Name="CvvBox"
+                     materialDesign:HintAssist.Hint="Введіть Cvv" Style="{StaticResource MaterialDesignFloatingHintTextBox}"/>
+        </StackPanel>
+        <StackPanel x:Name="StackDepodit" Margin="0,-150,0,0" Visibility="Collapsed" Orientation="Horizontal">
+            <TextBox x:Name="DepositSum" Background="White" Height="35" Margin="0,10,120,0" Width="175" FontSize="15" Style="{StaticResource MaterialDesignFloatingHintTextBox}" materialDesign:HintAssist.Hint="Введіть суму поповнення" />
+            <TextBox Background="White" Height="35" Width="150" Margin="-100,10,0,0" FontSize="15" x:Name="Number" materialDesign:HintAssist.Hint="Ваш номер телефону" Style="{StaticResource MaterialDesignFloatingHintTextBox}"/>
+            
+        </StackPanel>
+        <TextBlock x:Name="BalanceText"
+FontSize="16"
+Foreground="White"
+HorizontalAlignment="Center"
+Margin="0,0,0,0"/>
+        <Button Margin="0,-30,0,0" x:Name="ButtonDeposit" Click="ButtonDeposit_Click"  Content="Поповнити" Visibility="Visible" Width="150"/>
+
+
+        <Button Margin="0,-30,0,0" x:Name="ButtonCheak" Click="ButtonCheak_Click" Content="Перевірити данні" Visibility="Visible"/>
+    </Grid>
+</Window>
