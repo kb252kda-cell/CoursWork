@@ -1,5 +1,25 @@
-﻿# build output
+﻿# Build output
 bin/
 obj/
-# use
+
+# Visual Studio
 .vs/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+*.rsuser
+
+# NuGet packages
+packages/
+*.nupkg
+*.nuget.props
+*.nuget.targets
+
+# Logs
+*.log
+
+# Temporary files
+*.tmp
+*.cache
+Thumbs.db
