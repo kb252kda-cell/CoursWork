@@ -723,7 +723,7 @@ namespace OOPWPFProject
 
                 loginpng.Source = new BitmapImage(new Uri("/Photos/profile.png", UriKind.Relative));
                 LoginTxt.Text = "Профіль";
-
+                NumberPhone = courier1.codeLogin;
                 ShowProfile();
                 StatusS.Visibility = Visibility.Visible;
                 StatusSButton.Visibility = Visibility.Visible;
