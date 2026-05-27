@@ -432,6 +432,15 @@ namespace OOPWPFProject
                     AddCourier.Visibility = Visibility.Visible;
                     ((ListBoxItem)OrdList.ItemContainerGenerator.ContainerFromIndex(2)).Visibility = Visibility.Collapsed;
                     OrdersList.ItemsSource = order.loadOrderAdmin().DefaultView;
+                    TovarCour.Visibility = Visibility.Visible;
+                    OrdersPhoto.Visibility = Visibility.Visible;
+                    DeleteOrder.Visibility = Visibility.Visible;
+                    SortPrice.Visibility = Visibility.Visible;
+                    SearchCategori.Visibility = Visibility.Visible;
+                    StackSearch.Visibility = Visibility.Visible;
+                    BuyMenu.Visibility = Visibility.Visible;
+                    AddOrder.Visibility = Visibility.Collapsed;
+
 
                     return;
                 }
