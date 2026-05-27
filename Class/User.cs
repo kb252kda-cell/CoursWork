@@ -17,10 +17,10 @@ using System.Windows.Media.Imaging;
 
 
 
-    namespace OOPWPFProject
+namespace OOPWPFProject
+{
+    public abstract class User
     {
-        public class User
-        {
         private const string ConnectionString = "Host=localhost;Port=5432;Database=Order;Username=postgres;Password=promomo999;";
         public string email { get; set; }
         public string Number { get; set; }
@@ -57,8 +57,8 @@ using System.Windows.Media.Imaging;
                 }
 
             }
-            
-            }
+
+        }
         public bool Login()
         {
             using (NpgsqlConnection conn = new NpgsqlConnection(ConnectionString))
@@ -108,24 +108,30 @@ using System.Windows.Media.Imaging;
         }
 
 
-        public virtual DataTable ShowOrders(Order order)
-            {
-                return order.loadOrderUser();
-            }
-        }
+        public abstract DataTable ShowOrders(Order order);
 
-       
 
-        public class Admin : User
+
+
+
+    }
+    public class RegularUser : User
+    {
+        public override DataTable ShowOrders(Order order)
         {
-            public override DataTable ShowOrders(Order order)
-            {
-                return order.loadOrderAdmin();
-            }
+            return order.loadOrderUser();
+        }
+    }
+
+    public class Admin : User
+    {
+        public override DataTable ShowOrders(Order order)
+        {
+            return order.loadOrderAdmin();
+        }
         public bool IsAdminCredentials(string email, string password)
         {
             return email == "dtimasik@gmail.com" && password == "promomo999";
         }
     }
-    
-    }
+}

@@ -6,10 +6,11 @@
     using System.Threading.Tasks;
     using System.Windows;
     using System.Data;
+using OOPWPFProject.Class;
 
-    namespace OOPWPFProject
+namespace OOPWPFProject
     {
-        public class Order
+        public class Order : IDbEntity
         {
             Courier couriers = new Courier();
             private const string ConnectionString = "Host=localhost;Port=5432;Database=Order;Username=postgres;Password=promomo999;";
@@ -25,8 +26,11 @@
             public string statusOrder { get; set; } = "Очікується підтвердження";
             public string commentOrder { get; set; } = "";
             public string courierName { get; set; }
+        public void Add() => addorderAdmin();
+        public void Delete() => deleteorder();
+        public DataTable Load() => loadOrderAdmin();
 
-            public void addorderAdmin()
+        public void addorderAdmin()
             {
                 using (NpgsqlConnection conn = new NpgsqlConnection(ConnectionString))
                 {

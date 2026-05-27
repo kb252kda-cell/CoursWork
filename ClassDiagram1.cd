@@ -1,2 +1,56 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<ClassDiagram /> 
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="OOPWPFProject.Courier">
+    <Position X="0.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AACCAAAAAAAgAAAAEgAAAAIAAAAABCAEADQAAACACEA=</HashCode>
+      <FileName>Class\Courier.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="OOPWPFProject.Delivery">
+    <Position X="2.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAACAIAAAAAAAAAAAAIAAAAGAAAABAACA=</HashCode>
+      <FileName>Class\Delivery.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="OOPWPFProject.Class.DepositBalance">
+    <Position X="4.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAABAAAEAAAAAAABAAAAIAAgAAAIAACAAAAAABAg=</HashCode>
+      <FileName>Class\DepositBalance.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="OOPWPFProject.Order">
+    <Position X="6.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAkEAABAQAAAAAAAAIIBEAAAANAAEBCAAAEAhAAg=</HashCode>
+      <FileName>Class\Order.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="OOPWPFProject.Tovar">
+    <Position X="8.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAwAAAAAAAAAECAAAAAQQAAAAAAAAAAAQCACYAAACAA=</HashCode>
+      <FileName>Class\Tovar.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="OOPWPFProject.User">
+    <Position X="11" Y="0.75" Width="1.5" />
+    <Compartments>
+      <Compartment Name="Nested Types" Collapsed="false" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>AAAAAAABAAAAAAAgAEAQAAAAAAARAAACACBQAIAAAAA=</HashCode>
+      <FileName>Class\User.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="OOPWPFProject.Admin">
+    <Position X="13.5" Y="1" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAAA=</HashCode>
+      <FileName>Class\User.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

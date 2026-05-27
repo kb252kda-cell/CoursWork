@@ -1,4 +1,5 @@
 ﻿using Npgsql;
+using OOPWPFProject.Class;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -11,7 +12,7 @@ using System.Windows.Documents;
 
 namespace OOPWPFProject
 {
-    public class Tovar
+    public class Tovar : IDbEntity
     {
         private const string ConnectionString = "Host=localhost;Port=5432;Database=Order;Username=postgres;Password=promomo999;";
         public string nameTovar1 { get; set; }
@@ -20,6 +21,9 @@ namespace OOPWPFProject
         public int amountTovar1 { get; set; }
         public decimal priceTovar1 { get; set; }
         public string categoriTovar1 { get; set; }
+        public void Add() => addproduct();
+        public void Delete() => deleteTovar();
+        public DataTable Load() => loadTovary();
         public void Update()
         {
             using (NpgsqlConnection conn = new NpgsqlConnection(ConnectionString))
@@ -36,7 +40,7 @@ namespace OOPWPFProject
                 cmd.ExecuteNonQuery();
             }
         }
-        public void addproduct()
+        public void  addproduct()
         {
 
             using (NpgsqlConnection conn = new NpgsqlConnection(ConnectionString))
