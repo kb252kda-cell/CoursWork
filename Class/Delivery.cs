@@ -44,21 +44,7 @@ namespace OOPWPFProject
         }
       
         
-        public void changeStatusDelivery(){
-            using (var conn = new NpgsqlConnection(ConnectionString))
-            {
-                conn.Open();
-
-                string sql = "UPDATE \"Delivery\" SET \"statusDelivery\" = @status WHERE \"idDelivery\" = @idDelivery";
-
-                NpgsqlCommand cmd = new NpgsqlCommand(sql, conn);
-
-                cmd.Parameters.AddWithValue("@status", statusDelivery);
-                cmd.Parameters.AddWithValue("@idDelivery", idDelivery);
-
-                cmd.ExecuteNonQuery();
-            }
-        }
+    
 
     }
 
