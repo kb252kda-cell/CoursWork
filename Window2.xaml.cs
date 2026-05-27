@@ -93,7 +93,7 @@ namespace OOPWPFProject
         }
         private void Timer_Tick(object sender, EventArgs e)
         {
-
+            timer.Stop();
             order.idOrder = currentOrderId;
             order.statusOrder = "Доставлено";
             order.changeStatus();
@@ -109,7 +109,6 @@ namespace OOPWPFProject
 
             StatusS.Visibility = Visibility.Visible;
             LoadCourierOrders();
-            timer.Stop();
 
 
         }
@@ -360,7 +359,7 @@ namespace OOPWPFProject
                 CartPayment.Visibility = Visibility.Visible;
                 MoneyPayment.Visibility = Visibility.Visible;
                 SearchCategori.Visibility = Visibility.Visible;
-
+                AddCourier.Visibility = Visibility.Collapsed;
                 Email.Clear();
                 Numbe.Clear();
                 Name_Fname.Clear();
@@ -739,7 +738,8 @@ namespace OOPWPFProject
 
             if (dt.Rows.Count > 0)
             {
-                isLoggedIn  = true;
+                courier1.nameEmployee = dt.Rows[0]["ElementName"].ToString(); 
+                isLoggedIn = true;
                 isCourier = true;
 
                 currentname = "Кур'єр";
@@ -876,8 +876,9 @@ namespace OOPWPFProject
             ComboBoxItem item = SortPrice.SelectedItem as ComboBoxItem;
 
             string sort = item.Content.ToString();
+            DataTable dt = currentUser is Admin ? order.loadOrderAdmin() : order.loadOrderUser();
 
-            DataTable dt = order.loadOrderUser();
+
 
             if (sort == "Спочатку дорожчі")
             {
