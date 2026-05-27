@@ -35,7 +35,7 @@ namespace OOPWPFProject
         Tovar tov = new Tovar();
         Order order = new Order();
         User currentUser;
-        RegularUser users = new RegularUser();
+        User users = new RegularUser();
         private bool isLoggedIn = false;
         private int currentOrderId;
         private string currentname = "";
