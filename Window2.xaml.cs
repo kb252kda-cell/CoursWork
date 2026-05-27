@@ -63,10 +63,10 @@ namespace OOPWPFProject
         }
         private void LoadCourierOrders()
         {
+            order.courierName = courier1.nameEmployee;
             DataTable dt = order.loadOrderCourier();
 
-            var filtered = dt.AsEnumerable()
-                             .Where(row => row["statusOrder"].ToString() != "Доставлено");
+            var filtered = dt.AsEnumerable().Where(row => row["statusOrder"].ToString() != "Доставлено");
 
             if (filtered.Any())
             {
@@ -235,6 +235,11 @@ namespace OOPWPFProject
         }
         private void l_Checked(object sender, RoutedEventArgs e)
         {
+            Email.Clear();
+            Password.Password = "";
+            Numbe.Clear();
+            Name_Fname.Clear();
+            Code.Clear();
             Log.Visibility = Visibility.Visible;
             Reg.Visibility = Visibility.Collapsed;
             Numbe.Visibility = Visibility.Collapsed;
@@ -250,6 +255,11 @@ namespace OOPWPFProject
 
         private void r_Checked(object sender, RoutedEventArgs e)
         {
+            Email.Clear();
+            Password.Password = "";
+            Numbe.Clear();
+            Name_Fname.Clear();
+            Code.Clear();
             Reg.Visibility = Visibility.Visible;
             Log.Visibility = Visibility.Collapsed;
             Numbe.Visibility = Visibility.Visible;
@@ -264,6 +274,11 @@ namespace OOPWPFProject
         }
         private void c_Checked(object sender, RoutedEventArgs e)
         {
+            Email.Clear();
+            Password.Password = "";
+            Numbe.Clear();
+            Name_Fname.Clear();
+            Code.Clear();
             Log.Visibility = Visibility.Collapsed;
             Reg.Visibility = Visibility.Collapsed;
             Numbe.Visibility = Visibility.Collapsed;
@@ -985,6 +1000,23 @@ namespace OOPWPFProject
 
             };
             depositWindow.Show();
+        }
+
+        private void Password_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                Log_Click(sender, e); 
+
+            }
+        }
+
+        private void Name_Fname_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                Reg_Click(sender, e);
+            }
         }
     }
     }

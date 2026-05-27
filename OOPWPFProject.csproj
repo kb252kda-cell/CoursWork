@@ -162,6 +162,7 @@
     </Compile>
     <Compile Include="Class\Courier.cs" />
     <Compile Include="Class\DepositBalance.cs" />
+    <Compile Include="Class\IDbEntity.cs" />
     <Compile Include="CourierInfo.xaml.cs">
       <DependentUpon>CourierInfo.xaml</DependentUpon>
     </Compile>

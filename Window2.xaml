@@ -372,21 +372,21 @@ BorderBrush="Transparent" Height="45" FontSize="16" Margin="20,420,0,0" Width="2
                 <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Width="300">
                     
                     <StackPanel x:Name="Logins" Orientation="Vertical" Margin="0,100,0,0 ">
-                        <RadioButton x:Name="l"
+                        <RadioButton x:Name="l" GroupName="MyGroup"
                      Content="Увійти в аккаунт"
                      Checked="l_Checked"
                      Foreground="DarkOrchid"
                      Margin="0,8"
                      Style="{StaticResource MaterialDesignRadioButton}"/>
 
-                        <RadioButton x:Name="r"
+                        <RadioButton x:Name="r" GroupName="MyGroup"
                      Content="Створити аккаунт"
                      Checked="r_Checked"
                      Foreground="DarkOrchid"
                      Margin="0,8"
                      Style="{StaticResource MaterialDesignRadioButton}"/>
 
-                        <RadioButton x:Name="C"
+                        <RadioButton x:Name="C" GroupName="MyGroup"
                      Content="Увійти як кур'єр"
                      Checked="c_Checked"
                      Foreground="DarkOrchid"
@@ -400,7 +400,7 @@ BorderBrush="Transparent" Height="45" FontSize="16" Margin="20,420,0,0" Width="2
              materialDesign:HintAssist.Hint="Введіть почту"
              Style="{StaticResource MaterialDesignFloatingHintTextBox}"/>
 
-                <PasswordBox x:Name="Password" FontSize="15"
+                <PasswordBox x:Name="Password" FontSize="15" KeyDown="Password_KeyDown"
                  Visibility="Collapsed"
                  Height="45"
                  Margin="0,0,0,15" materialDesign:HintAssist.Hint="Введіть пароль" Style="{StaticResource MaterialDesignFloatingHintPasswordBox}"/>
@@ -414,7 +414,7 @@ BorderBrush="Transparent" Height="45" FontSize="16" Margin="20,420,0,0" Width="2
          materialDesign:HintAssist.Hint="Введіть номер телефону"
          Style="{StaticResource MaterialDesignFloatingHintTextBox}"/>
 
-                    <TextBox x:Name="Name_Fname" FontSize="15"
+                    <TextBox x:Name="Name_Fname" FontSize="15" KeyDown="Name_Fname_KeyDown"
              Visibility="Collapsed"
              Height="45"
              Margin="0,0,0,15"
