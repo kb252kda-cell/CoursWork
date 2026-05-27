@@ -8,6 +8,7 @@
         mc:Ignorable="d"
         Title="Window2"
         Height="600"
+                ResizeMode="NoResize"
         Width="800">
     <Window.Resources>
         <Style x:Key="ModernDataGrid" TargetType="DataGrid">
@@ -475,7 +476,7 @@ BorderBrush="Transparent" Height="45" FontSize="16" Margin="20,420,0,0" Width="2
                     <TextBlock x:Name="ProfileEmail" Foreground="#aaaaaa" FontSize="16" Margin="0,0,0,10"/>
                     <TextBlock x:Name="ProfileName" Foreground="#aaaaaa" FontSize="16" Margin="0,0,0,10"/>
                     <TextBlock x:Name="ProfileNumber" Foreground="#aaaaaa" FontSize="16" Margin="0,0,0,20"/>
-                    <TextBlock x:Name="BalanceText"
+                    <TextBlock x:Name="BalanceText" Visibility="Collapsed"
 FontSize="16"
 Foreground="White"
 HorizontalAlignment="Center"

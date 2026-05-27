@@ -1,32 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Data;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace OOPWPFProject
 {
-    /// <summary>
-    /// Логика взаимодействия для Courier.xaml
-    /// </summary>
     public partial class CourierInfo : Window
     {
-        public CourierInfo()
+        public CourierInfo(string courierName)
         {
             InitializeComponent();
-            CourierGrid.ItemsSource = couriers.loadCourier().DefaultView;
+            Courier courier = new Courier();
+            DataTable dt = courier.loadCourier();
+            var filtered = dt.AsEnumerable()
+                .Where(r => r["ElementName"].ToString() == courierName);
+            if (filtered.Any())
+                CourierGrid.ItemsSource = filtered.CopyToDataTable().DefaultView;
         }
-        Courier couriers = new Courier();
-       
     }
-    
-    
 }

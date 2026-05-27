@@ -171,6 +171,7 @@ namespace OOPWPFProject
 
                     if (isLoggedIn && currentUser != null)
                     {
+                        order.clientName = currentname;
                         OrdersList.ItemsSource =
                             currentUser.ShowOrders(order).DefaultView;
 
@@ -439,6 +440,8 @@ namespace OOPWPFProject
                     StackSearch.Visibility = Visibility.Visible;
                     BuyMenu.Visibility = Visibility.Visible;
                     AddOrder.Visibility = Visibility.Collapsed;
+                    BalanceText.Visibility = Visibility.Collapsed;
+
 
 
                     return;
@@ -479,6 +482,7 @@ namespace OOPWPFProject
                     BuyMenu.Visibility = Visibility.Visible;
                     OrdersPhoto.Visibility = Visibility.Visible;
                     BusketPhoto.Visibility = Visibility.Visible;
+                    BalanceText.Visibility = Visibility.Visible;
                     Email.Clear();
                     Password.Clear();
 
@@ -551,6 +555,8 @@ namespace OOPWPFProject
 
         private void exitAcc_Click(object sender, RoutedEventArgs e)
         {
+            timer.Stop();
+            currentUser = null;
             isLoggedIn = false;
             isCourier = false;
             isAdmin = false;
@@ -572,6 +578,7 @@ namespace OOPWPFProject
             BuyMenu.Visibility = Visibility.Collapsed;
             OrdersPhoto.Visibility = Visibility.Collapsed;
             BusketPhoto.Visibility = Visibility.Collapsed;
+            BalanceText.Visibility = Visibility.Collapsed;
             ((ListBoxItem)OrdList.ItemContainerGenerator.ContainerFromIndex(2)).Visibility = Visibility.Visible;
             cart.Clear();
             OrdersList.ItemsSource = null;
@@ -830,7 +837,7 @@ namespace OOPWPFProject
             if (order.statusOrder == "В дорозі")
             {
                 StatusS.Visibility = Visibility.Collapsed;
-
+                if (timer.IsEnabled) return;
                 currentOrderId = id;
                 timer.Start();
             }
@@ -902,7 +909,16 @@ namespace OOPWPFProject
 
         private void ButtonInfoCourier_Click(object sender, RoutedEventArgs e)
         {
-            CourierInfo courierwindow = new CourierInfo();
+            if (OrdersList.SelectedItem == null)
+            {
+                MessageBox.Show("Виберіть замовлення!");
+                return;
+            }
+
+            DataRowView row = OrdersList.SelectedItem as DataRowView;
+            string courierName = row["CourierName"].ToString();
+
+            CourierInfo courierwindow = new CourierInfo(courierName);
             courierwindow.Show();
         }
 

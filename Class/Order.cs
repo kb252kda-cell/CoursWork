@@ -62,7 +62,7 @@ namespace OOPWPFProject
                 {
                     conn.Open();
 
-                    string sql = @"SELECT   ""idOrder"", ""nameProduct"", ""totalPrice"", ""amountProduct"", ""dateOrder"", ""addressOrder"", ""statusOrder""  FROM ""OrderAdmin"" WHERE ""clientName"" = @clientName";
+                    string sql = @"SELECT   ""idOrder"", ""nameProduct"", ""totalPrice"", ""amountProduct"", ""dateOrder"", ""addressOrder"", ""statusOrder"", ""CourierName""   FROM ""OrderAdmin"" WHERE ""clientName"" = @clientName";
                     NpgsqlCommand cmd = new NpgsqlCommand(sql, conn);
                     cmd.Parameters.AddWithValue("@clientName", clientName);
     
