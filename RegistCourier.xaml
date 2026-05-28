@@ -85,7 +85,7 @@
                     <TextBlock Text="Місто" />
                     <ComboBox x:Name="cityCour">
                         <ComboBoxItem Content="Житомир"/>
-                        <ComboBoxItem Content="ЛЬвів"/>
+                        <ComboBoxItem Content="Львів"/>
                         <ComboBoxItem Content="Київ"/>
                     </ComboBox>
                     <TextBlock Text="Код"/>
