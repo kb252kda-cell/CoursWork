@@ -24,7 +24,6 @@ namespace OOPWPFProject
             public string cityOrder { get; set; }
             public string numberClient { get; set; }
             public string statusOrder { get; set; } = "Очікується підтвердження";
-            public string commentOrder { get; set; } = "";
             public string courierName { get; set; }
         public void Add() => addorderAdmin();
         public void Delete() => deleteorder();
@@ -49,7 +48,6 @@ namespace OOPWPFProject
                     cmd.Parameters.AddWithValue("@addressOrder", addressOrder);
                     cmd.Parameters.AddWithValue("@numberClient", numberClient);
                     cmd.Parameters.AddWithValue("@statusOrder", statusOrder);
-                    cmd.Parameters.AddWithValue("@commentOrder", commentOrder);
                     cmd.Parameters.AddWithValue("@courier", courierName);
                     cmd.ExecuteNonQuery();
 
