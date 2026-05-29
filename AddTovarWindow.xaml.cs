@@ -100,7 +100,7 @@
 
                 }
 
-                private void PhotoS_Click(object sender, RoutedEventArgs e)
+                private void PhotoButton_Click(object sender, RoutedEventArgs e)
                 {
                     OpenFileDialog openFileDialog = new OpenFileDialog();
                     if (openFileDialog.ShowDialog() == true)
