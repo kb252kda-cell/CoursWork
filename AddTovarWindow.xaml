@@ -67,7 +67,7 @@
             </Border.Effect>
             <ScrollViewer VerticalScrollBarVisibility="Auto">
                 <StackPanel>
-                    <TextBlock Text="Додайте замовлення" HorizontalAlignment="Center" FontSize="20" FontWeight="Bold"/>
+                    <TextBlock Text="Додайте товар" HorizontalAlignment="Center" FontSize="20" FontWeight="Bold"/>
                     <TextBlock Text="Назва товару"/>
                     <TextBox x:Name="nameTovar"/>
                     <TextBlock Text="Ціна"/>
