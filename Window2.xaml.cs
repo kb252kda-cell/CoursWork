@@ -617,6 +617,7 @@ namespace OOPWPFProject
                 ResetControl(CityDelivery);
 
             }
+
             if (CartPayment.IsChecked != true && MoneyPayment.IsChecked != true)
             {
                 MessageBox.Show("Виберіть спосіб оплати!");
@@ -626,7 +627,13 @@ namespace OOPWPFProject
             if (!valid)
             { return; 
             }
-
+            string city = (CityDelivery.SelectedItem as ComboBoxItem)?.Content.ToString();
+            string courierName = courier1.GetRandomCourier(city);
+            if (string.IsNullOrEmpty(courierName))
+            {
+                MessageBox.Show("Немає доступних кур'єрів у цьому місті");
+                return;
+            }
             if (CartPayment.IsChecked == true)
             {
                 decimal total = cart.AsEnumerable().Sum(r => Convert.ToDecimal(r["Сума"]));
@@ -653,7 +660,6 @@ namespace OOPWPFProject
 
             if (valid)
             {
-                string city = (CityDelivery.SelectedItem as ComboBoxItem)?.Content.ToString();
 
                 string address = AdressDelivery.Text?.Trim();
                 delivery.addressDelivery = address;
@@ -661,12 +667,7 @@ namespace OOPWPFProject
 
                 order.addressOrder = city + ", " + address;
 
-                string courierName = courier1.GetRandomCourier(city);
-                if (string.IsNullOrEmpty(courierName))
-                {
-                    MessageBox.Show("Немає доступних кур'єрів у цьому місті");
-                    return;
-                }
+              
 
                 delivery.CreateDelivery(city, address);
 
