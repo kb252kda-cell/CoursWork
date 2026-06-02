@@ -36,9 +36,9 @@ namespace OOPWPFProject
                     conn.Open();
                     courierName = couriers.GetRandomCourier(cityOrder);
                     string query =
-    "INSERT INTO \"OrderAdmin\" (\"nameProduct\", \"totalPrice\", \"amountProduct\", \"dateOrder\", \"clientName\",\"addressOrder\", \"numberClient\", \"statusOrder\", \"commentOrder\",\"CourierName\") " +
+    "INSERT INTO \"OrderAdmin\" (\"nameProduct\", \"totalPrice\", \"amountProduct\", \"dateOrder\", \"clientName\",\"addressOrder\", \"numberClient\", \"statusOrder\",\"CourierName\") " +
     "VALUES (@nameProduct, @totalPrice, @amountProduct, @dateOrder, " +
-    "@clientName, @addressOrder, @numberClient, @statusOrder, @commentOrder, @courier)";
+    "@clientName, @addressOrder, @numberClient, @statusOrder,  @courier)";
                     NpgsqlCommand cmd = new NpgsqlCommand(query, conn);
                     cmd.Parameters.AddWithValue("@nameProduct", nameProduct);
                     cmd.Parameters.AddWithValue("@totalPrice", totalPrice);

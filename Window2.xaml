@@ -9,7 +9,7 @@
         Title="Window2"
         Height="600"
                 ResizeMode="NoResize"
-        Width="800">
+        Width="900">
     <Window.Resources>
         <Style x:Key="ModernDataGrid" TargetType="DataGrid">
             <Setter Property="Background" Value="#1E2228"/>
@@ -231,7 +231,7 @@
                     <Button x:Name="SearchButton" Content="🔎" Height="40" Click="SearchButton_Click"/>
                     
                 </StackPanel>
-                <ComboBox x:Name="SearchCategori" Visibility="Collapsed" SelectionChanged="SearchCategori_Selected" Background="White" Height="55" Width="150" materialDesign:HintAssist.Hint="Категорія" Margin="0,-400,0,0" Style="{StaticResource MaterialDesignOutlinedComboBox}">
+                <ComboBox x:Name="SearchCategori" Visibility="Collapsed"  SelectionChanged="SearchCategori_SelectionChanged" Background="White" Height="55" Width="150" materialDesign:HintAssist.Hint="Категорія" Margin="0,-400,0,0" Style="{StaticResource MaterialDesignOutlinedComboBox}">
                     <ComboBoxItem Content="Їжа"/>
                     <ComboBoxItem Content="Напої"/>
                     <ComboBoxItem Content="Інше"/>
@@ -328,7 +328,19 @@ AutoGenerateColumns="True" Width="500" IsReadOnly="True" Margin="20" RowHeight="
             <Grid x:Name="basket" Visibility="Collapsed" Background="#1E2228" Grid.RowSpan="2">
                 <TextBlock Text="Кошик" Foreground="Black" FontSize="24" Margin="20"/>
                 <TextBlock x:Name="TotalText" FontSize="18" FontWeight="Bold" Foreground="White"  Margin="0,100,0,0"/>
-
+                Ви хочете додати можливість видаляти товар з кошика перед оформленням замовлення. Зараз такої функції немає.
+У XAML додайте кнопку в Grid basket:
+xml
+                <Button x:Name="DeleteFromCart" 
+        Content="Видалити з кошика"
+        Background="#C0392B" 
+        Foreground="White"
+        BorderBrush="Transparent" 
+        Height="45" FontSize="16" 
+        Margin="20,470,0,0" 
+        Width="250"
+        Visibility="Collapsed"
+        Click="DeleteFromCart_Click"/>
                 <DataGrid x:Name="BasketGrid"
 Style="{StaticResource ModernDataGrid}" 
                           

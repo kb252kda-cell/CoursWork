@@ -578,7 +578,9 @@ namespace OOPWPFProject
             BuyMenu.Visibility = Visibility.Collapsed;
             OrdersPhoto.Visibility = Visibility.Collapsed;
             BusketPhoto.Visibility = Visibility.Collapsed;
+            ButtonInfoCourier.Visibility = Visibility.Collapsed;
             BalanceText.Visibility = Visibility.Collapsed;
+            DeleteOrder.Visibility = Visibility.Collapsed;
             ((ListBoxItem)OrdList.ItemContainerGenerator.ContainerFromIndex(2)).Visibility = Visibility.Visible;
             cart.Clear();
             OrdersList.ItemsSource = null;
@@ -853,27 +855,34 @@ namespace OOPWPFProject
             TovarGridOf.ItemsSource = dt.DefaultView;
         }
 
-        private void SearchCategori_Selected(object sender, RoutedEventArgs e)
+        private void SearchCategori_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (SearchCategori.SelectedItem == null)
-            {
                 return;
-            }
+
             ComboBoxItem item = SearchCategori.SelectedItem as ComboBoxItem;
+            if (item == null)
+                return;
 
-            string category = item.Content.ToString();
+            string category = item.Content.ToString().Trim();
 
-            if (category == "Всі")
+            try
             {
-                TovarGridOf.ItemsSource = tov.loadTovary().DefaultView;
-            }
-            else
-            {
-                tov.categoriTovar1 = category;
-                TovarGridOf.ItemsSource = tov.searchCategori().DefaultView;
-                
+                if (category == "Усі")
+                {
+                    DataTable dt = tov.loadTovary();
+                    TovarGridOf.ItemsSource = dt.DefaultView;
                 }
-
+                else
+                {
+                    tov.categoriTovar1 = category;
+                    TovarGridOf.ItemsSource = tov.searchCategori().DefaultView;
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Помилка: " + ex.Message);
+            }
         }
 
         private void SortPrice_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -1044,6 +1053,11 @@ namespace OOPWPFProject
             {
                 Reg_Click(sender, e);
             }
+        }
+
+        private void DeleteFromCart_Click(object sender, RoutedEventArgs e)
+        {
+
         }
     }
     }

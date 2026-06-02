@@ -128,9 +128,9 @@ namespace OOPWPFProject
             {
                 conn.Open();
 
-                string sql = "SELECT * FROM \"Tovar\" WHERE \"Categori\" = @categori";
+                string sql = "SELECT * FROM \"Tovar\" WHERE \"Categori\" ILIKE @categori";
                 NpgsqlCommand cmd = new NpgsqlCommand(sql, conn);
-                cmd.Parameters.AddWithValue("@categori",  categoriTovar1);
+                cmd.Parameters.AddWithValue("@categori", categoriTovar1.Trim());
                 NpgsqlDataAdapter da = new NpgsqlDataAdapter(cmd);
                 DataTable dt = new DataTable();
                 da.Fill(dt);
