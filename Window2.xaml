@@ -227,7 +227,7 @@
             <Grid x:Name="Tovary" Visibility="Collapsed" Background="#1E2228" Grid.RowSpan="2">
                 <TextBlock Text="Товари" Foreground="White" FontSize="24" Margin="20"/>
                 <StackPanel x:Name="StackSearch" Orientation="Horizontal"  Margin="500,-400,0,0" Visibility="Collapsed">
-                    <TextBox x:Name="SearchName"  materialDesign:HintAssist.Hint="пошук" Padding="0" FontSize="15" Foreground="Black"  Background="white" Width="150" VerticalAlignment="Center" TextAlignment="Center" VerticalContentAlignment="Center" Height="40"   Style="{StaticResource MaterialDesignFilledTextBox}" />
+                    <TextBox x:Name="SearchName"  materialDesign:HintAssist.Hint="пошук" Padding="0" FontSize="15" Foreground="Black"  Background="white" Width="150" VerticalAlignment="Center" TextAlignment="Center" VerticalContentAlignment="Center" Height="40"   Style="{StaticResource MaterialDesignFloatingHintTextBox}" />
                     <Button x:Name="SearchButton" Content="🔎" Height="40" Click="SearchButton_Click"/>
                     
                 </StackPanel>
@@ -328,16 +328,14 @@ AutoGenerateColumns="True" Width="500" IsReadOnly="True" Margin="20" RowHeight="
             <Grid x:Name="basket" Visibility="Collapsed" Background="#1E2228" Grid.RowSpan="2">
                 <TextBlock Text="Кошик" Foreground="Black" FontSize="24" Margin="20"/>
                 <TextBlock x:Name="TotalText" FontSize="18" FontWeight="Bold" Foreground="White"  Margin="0,100,0,0"/>
-                Ви хочете додати можливість видаляти товар з кошика перед оформленням замовлення. Зараз такої функції немає.
-У XAML додайте кнопку в Grid basket:
-xml
+               
                 <Button x:Name="DeleteFromCart" 
         Content="Видалити з кошика"
         Background="#C0392B" 
         Foreground="White"
         BorderBrush="Transparent" 
         Height="45" FontSize="16" 
-        Margin="20,470,0,0" 
+        Margin="20,500,0,0" 
         Width="250"
         Visibility="Collapsed"
         Click="DeleteFromCart_Click"/>
@@ -349,7 +347,7 @@ AutoGenerateColumns="True" Width="500" IsReadOnly="True" Margin="20" RowHeight="
 
                 <StackPanel  x:Name="CityD" >
 
-                    <ComboBox Visibility="Collapsed" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" materialDesign:HintAssist.Hint="Місто доставки"  Style="{StaticResource MaterialDesignFloatingHintComboBox}" FontSize="18" x:Name="CityDelivery" Foreground="Black" Background="White" SelectionChanged="CityDelivery_SelectionChanged"  Width="200" Height="57" Margin="0,400,500,0">
+                    <ComboBox Visibility="Collapsed" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" materialDesign:HintAssist.Hint="Місто доставки"  Style="{StaticResource MaterialDesignDataGridComboBox}" FontSize="18" x:Name="CityDelivery" Foreground="Black" Background="White" SelectionChanged="CityDelivery_SelectionChanged"  Width="200" Height="57" Margin="0,400,550,0">
                         <ComboBox.ItemContainerStyle>
                             <Style TargetType="ComboBoxItem">
                                 <Setter Property="HorizontalContentAlignment" Value="Center"/>
@@ -364,7 +362,7 @@ AutoGenerateColumns="True" Width="500" IsReadOnly="True" Margin="20" RowHeight="
 
                     <StackPanel  x:Name="AddressD" Margin="250,10,0,0"  >
 
-                        <ComboBox  x:Name="AdressDelivery" Width="180" Background="White" FontSize="18" Height="57" materialDesign:HintAssist.Hint="Оберіть адресу" Foreground="Black"  Style="{StaticResource MaterialDesignFloatingHintComboBox}" Margin="0,-10,0,0"/>
+                        <ComboBox  x:Name="AdressDelivery" Width="180" Background="White" FontSize="18" Height="57" materialDesign:HintAssist.Hint="Оберіть адресу" Foreground="Black"  Style="{StaticResource MaterialDesignDataGridComboBox}" Margin="0,-10,0,0"/>
                     </StackPanel>
 
                    

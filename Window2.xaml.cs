@@ -485,9 +485,9 @@ namespace OOPWPFProject
                     BalanceText.Visibility = Visibility.Visible;
                     Email.Clear();
                     Password.Clear();
-
+                    DeleteFromCart.Visibility = Visibility.Visible;
                 }
-                        else
+                else
                         {
                             Exit.Text = "Невірний email або пароль";
                         }
@@ -580,6 +580,7 @@ namespace OOPWPFProject
             BusketPhoto.Visibility = Visibility.Collapsed;
             ButtonInfoCourier.Visibility = Visibility.Collapsed;
             BalanceText.Visibility = Visibility.Collapsed;
+            DeleteFromCart.Visibility = Visibility.Collapsed;
             DeleteOrder.Visibility = Visibility.Collapsed;
             ((ListBoxItem)OrdList.ItemContainerGenerator.ContainerFromIndex(2)).Visibility = Visibility.Visible;
             cart.Clear();
@@ -702,6 +703,10 @@ namespace OOPWPFProject
                 CityDelivery.SelectedItem = null;
                 CartPayment.IsChecked = false;
                 MoneyPayment.IsChecked = false;
+                CityDelivery.Background = Brushes.White;
+                CityDelivery.ToolTip = "";
+                AdressDelivery.Background = Brushes.White;
+                AdressDelivery.ToolTip = "";
             }
         }
 
@@ -1057,7 +1062,17 @@ namespace OOPWPFProject
 
         private void DeleteFromCart_Click(object sender, RoutedEventArgs e)
         {
+            if (BasketGrid.SelectedItem == null)
+            {
+                MessageBox.Show("Виберіть товар для видалення!");
+                return;
+            }
 
+            DataRowView row = BasketGrid.SelectedItem as DataRowView;
+            if (row == null) return;
+
+            cart.Rows.Remove(row.Row);
+            UpdateTotal();
         }
     }
     }
